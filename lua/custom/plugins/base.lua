@@ -44,4 +44,5 @@ vim.o.termguicolors = true
 
 -- 折りたたみの基準
 vim.o.foldmethod = 'indent'
-vim.api.nvim_command('set nofoldenable') -- 起動時にコードの折りたたみを無効にした状態で開く
+vim.o.foldlevel = 99 -- 起動時にコードの折りたたみを無効にした状態で開く
+-- vim.api.nvim_command('set nofoldenable') -- 起動時にコードの折りたたみを無効にした状態で開く
