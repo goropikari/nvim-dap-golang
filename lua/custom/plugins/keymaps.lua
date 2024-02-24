@@ -19,3 +19,16 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<c-_>', require('Comment.api').toggle.linewise.current, { desc = 'Comment toggle linewise' })
 vim.keymap.set('x', '<c-_>', '<ESC><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>',
   { desc = 'Comment toggle linewise' })
+
+-- -- flash.nvim
+-- require('which-key').register({
+--     -- flash search
+--     l = {
+--         name = "flash",
+--         s = { function() require("flash").jump() end, "Flash Jump" },
+--         t = { function() require("flash").treesitter() end, "Flash Treesitter" },
+--         r = { function() require("flash").treesitter_search() end, "Flash Treesitter Search" },
+--     },
+-- }, { prefix = "<leader>" })
+
+vim.keymap.set('n', '<leader>cc', require('chowcho').run, { desc = "choose window" })
