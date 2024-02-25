@@ -15,7 +15,39 @@ require('gruvbox').setup({
     Comment = { fg = "#C0D4C0" }, -- line number の色を変える
   },
 })
-vim.cmd("colorscheme gruvbox")
+-- vim.cmd("colorscheme gruvbox")
+
+local c = require('vscode.colors').get_colors()
+require('vscode').setup({
+  -- Alternatively set style in setup
+  -- style = 'light'
+
+  -- Enable transparent background
+  transparent = true,
+
+  -- Enable italic comment
+  italic_comments = true,
+
+  -- Underline `@markup.link.*` variants
+  underline_links = true,
+
+  -- Disable nvim-tree background color
+  disable_nvimtree_bg = true,
+
+  -- Override colors (see ./lua/vscode/colors.lua)
+  color_overrides = {
+    vscLineNumber = '#FFFFFF',
+  },
+
+  -- Override highlight groups (see ./lua/vscode/theme.lua)
+  group_overrides = {
+    -- this supports the same val table as vim.api.nvim_set_hl
+    -- use colors from this colorscheme by requiring vscode.colors!
+    -- LineNr = { fg = "#C0D4C0" },  -- line number の色を変える
+    -- Comment = { fg = "#C0D4C0" }, -- line number の色を変える
+  }
+})
+vim.cmd('colorscheme vscode')
 
 -- [[noice.vim]]
 require("noice").setup({
@@ -35,6 +67,10 @@ require("noice").setup({
     inc_rename = false,           -- enables an input dialog for inc-rename.nvim
     lsp_doc_border = false,       -- add a border to hover docs and signature help
   },
+})
+
+require('notify').setup({
+  background_colour = '#000000',
 })
 
 require('lualine').setup({
@@ -159,6 +195,7 @@ require('chowcho').setup({
     end
     return false
   end,
+  selector_style = 'float',
   selector = {
     float = {
       border_style = "rounded",
