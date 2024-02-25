@@ -1,3 +1,21 @@
+-- [[ colorscheme ]]
+require('gruvbox').setup({
+  italic = {
+    strings = false,
+    emphasis = false,
+    comments = true,
+    operators = false,
+    folds = true,
+  },
+  undercurl = true,
+  underline = true,
+  bold = false,
+  overrides = {
+    LineNr = { fg = "#C0D4C0" },
+  },
+})
+vim.cmd("colorscheme gruvbox")
+
 -- [[noice.vim]]
 require("noice").setup({
   lsp = {
