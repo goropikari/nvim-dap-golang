@@ -11,7 +11,8 @@ require('gruvbox').setup({
   underline = true,
   bold = false,
   overrides = {
-    LineNr = { fg = "#C0D4C0" },
+    LineNr = { fg = "#C0D4C0" },  -- line number の色を変える
+    Comment = { fg = "#C0D4C0" }, -- line number の色を変える
   },
 })
 vim.cmd("colorscheme gruvbox")
