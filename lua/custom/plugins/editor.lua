@@ -215,3 +215,5 @@ require('chowcho').setup({
     },
   },
 })
+
+require('flash').setup()

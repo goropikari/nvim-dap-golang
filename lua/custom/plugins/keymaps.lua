@@ -49,7 +49,13 @@ vim.keymap.set('x', '<c-_>', '<ESC><CMD>lua require("Comment.api").locked("toggl
 --     },
 -- }, { prefix = "<leader>" })
 
+-- 開いている window を番号で選択する
 vim.keymap.set('n', '<leader>cc', require('chowcho').run, { desc = "choose window" })
+
+-- terminal mode を escape で抜ける
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])
+vim.keymap.set('n', '<c-t>', function() vim.cmd('ToggleTerm') end)
+vim.keymap.set('t', '<c-t>', function() vim.cmd('ToggleTerm') end)
 
 -- [[ neotest ]]
 local function common_neotest()
