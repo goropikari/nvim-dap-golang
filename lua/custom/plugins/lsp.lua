@@ -119,6 +119,8 @@ local servers = {
       },
     },
   },
+  ruby_ls = {},
+  rubocop = {},
   -- pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
