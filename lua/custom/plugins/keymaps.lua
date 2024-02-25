@@ -1,5 +1,23 @@
 -- [[ Basic Keymaps ]]
 
+-- document existing key chains
+require('which-key').register {
+  ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
+  ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
+  ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
+  ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+  ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
+  ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
+  -- ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
+  ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+}
+-- register which-key VISUAL mode
+-- required for visual <leader>hs (hunk stage) to work
+require('which-key').register({
+  ['<leader>'] = { name = 'VISUAL <leader>' },
+  ['<leader>h'] = { 'Git [H]unk' },
+}, { mode = 'v' })
+
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 -- vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -53,6 +71,11 @@ require('which-key').register({
       common_neotest()
       nt.run.run(vim.fn.expand('%'))
     end, "[T]est [A]ll" },
+    d = { function()
+      local nt = require('neotest')
+      common_neotest()
+      nt.run.run({ strategy = "dap" })
+    end, "[T]est [D]ebug" },
     o = { function()
       local nt = require('neotest')
       common_neotest()
@@ -60,3 +83,19 @@ require('which-key').register({
     end, "[T]est [O]utput" },
   },
 }, { prefix = "<leader>" })
+
+-- [[ nvim-dap ]]
+-- Basic debugging keymaps, feel free to change to your liking!
+local dap = require('dap')
+local dapui = require('dapui')
+local dapgo = require 'dap-go'
+vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
+vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
+vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
+vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
+vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
+vim.keymap.set('n', '<leader>B', function()
+  dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+end, { desc = 'Debug: Set Breakpoint' })
+vim.keymap.set('n', '<leader>dt', dapgo.debug_test, { desc = '[D]ebug [T]est' })
+vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
