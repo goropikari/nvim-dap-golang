@@ -22,6 +22,7 @@ require('neotest').setup({
 -- [[ Configuration DAP ]]
 local dap = require 'dap'
 local dapui = require 'dapui'
+require("nvim-dap-virtual-text").setup({})
 
 local go_dap_adapter_name = "delve"
 local ruby_dap_adapter_name = "rdbg"
