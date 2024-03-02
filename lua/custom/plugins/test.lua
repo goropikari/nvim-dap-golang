@@ -23,6 +23,7 @@ require('neotest').setup({
 local dap = require 'dap'
 local dapui = require 'dapui'
 require("nvim-dap-virtual-text").setup({})
+require('telescope').load_extension('dap')
 
 local go_dap_adapter_name = "delve"
 local ruby_dap_adapter_name = "rdbg"
