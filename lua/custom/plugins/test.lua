@@ -111,20 +111,6 @@ require('dap-ruby').setup()
 require('dap.ext.vscode').load_launchjs() -- .vscode/launch.json を読み込む
 vscode_config_to_nvim_config()            -- すべての config が読み込まれたあとに実行する
 
--- remote debug 用の adapter が作る
--- 個別の config は .vscode/launch.json に書くとプロジェクトごとの設定にできる
--- 書き方の例は後述
-local function split(inputstr, sep)
-  if sep == nil then
-    sep = "%s"
-  end
-  local t = {}
-  for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
-    table.insert(t, str)
-  end
-  return t
-end
-
 dap.adapters[go_dap_adapter_name] = function(callback, config)
   callback({ type = 'server', host = config.host, port = config.port })
 end
@@ -138,7 +124,7 @@ dap.adapters[ruby_dap_adapter_name] = function(callback, config)
   if config.port ~= nil then
     callback({ type = 'server', host = config.host, port = config.port })
   elseif config.debugPort ~= nil then
-    local t = split(config.debugPort, ':')
+    local t = vim.split(config.debugPort, ':')
     local host = t[1]
     local port = t[2]
     callback({ type = 'server', host = host, port = port })
