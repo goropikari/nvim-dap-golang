@@ -18,7 +18,6 @@ require('neotest').setup({
   },
 })
 
-
 -- [[ Configuration DAP ]]
 local dap = require 'dap'
 local dapui = require 'dapui'
@@ -52,6 +51,17 @@ local function vscode_config_to_nvim_config()
   if dap.configurations.rdbg ~= nil then
     for _, config in ipairs(dap.configurations.rdbg) do
       table.insert(dap.configurations.ruby, config)
+    end
+  end
+
+  -- [[ c++ ]]
+  if dap.configurations.cppdbg ~= nil then
+    for _, config in ipairs(dap.configurations.cppdbg) do
+      if config.request == 'launch' then
+        config.prehook = function()
+          vim.fn.system({ 'g++', '-g', '-O0', vim.fn.expand('%'), '-o', vim.fn.expand('%:r') })
+        end
+      end
     end
   end
 end
@@ -136,3 +146,40 @@ dap.adapters[ruby_dap_adapter_name] = function(callback, config)
     callback({ type = 'server', host = 'localhost', port = 12345 })
   end
 end
+
+-- [[  cpp debug ]]
+local cpptools_path = vim.fn.stdpath('data') .. '/cpptools'
+if not vim.loop.fs_stat(cpptools_path) then
+  -- vscode 用の dap adapter だが preLaunchTask までは扱ってくれないもよう
+  vim.fn.system { 'wget', 'https://github.com/microsoft/vscode-cpptools/releases/download/v.1.19.4/cpptools-linux.vsix', '-O', vim.fn.stdpath('data') .. '/cpptools-linux.vsix' }
+  vim.fn.system { 'unzip', vim.fn.stdpath('data') .. '/cpptools-linux.vsix', '-d', cpptools_path }
+  vim.fn.system { 'chmod', '+x', cpptools_path .. '/extension/debugAdapters/bin/OpenDebugAD7' }
+end
+dap.adapters.cppdbg = {
+  id = 'cppdbg',
+  type = 'executable',
+  command = cpptools_path .. '/extension/debugAdapters/bin/OpenDebugAD7',
+}
+dap.configurations.cpp = dap.configurations.cppdbg
+
+dap.adapters.gdbdap = {
+  type = "executable",
+  command = "gdb",
+  args = { "-i", "dap" } -- required gdb v14.x
+}
+if dap.configurations.cpp == nil then
+  dap.configurations.cpp = {}
+end
+table.insert(dap.configurations.cpp, {
+  -- 実行前にコンパイルする
+  prehook = function()
+    vim.fn.system({ 'g++', '-g', '-O0', vim.fn.expand('%'), '-o', vim.fn.expand('%:r') })
+  end,
+  name = "gdb dap",
+  type = "gdbdap",
+  request = "launch",
+  program = "${workspaceFolder}/${fileBasenameNoExtension}",
+  cwd = "${workspaceFolder}",
+  stopAtBeginningOfMainSubprogram = false,
+  -- args = { "<", "test.txt" },
+})
