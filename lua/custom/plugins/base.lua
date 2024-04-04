@@ -2,6 +2,9 @@
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 
+-- tab の表示幅
+vim.o.tabstop = 4
+
 -- Set highlight on search
 vim.o.hlsearch = true
 
@@ -14,7 +17,7 @@ vim.o.mouse = 'a'
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.o.clipboard = 'unnamedplus'
+vim.o.clipboard = 'unnamed,unnamedplus'
 
 -- Enable break indent
 -- 折り返された行もインデントが適用して表示される
