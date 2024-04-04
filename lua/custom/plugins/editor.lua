@@ -217,3 +217,13 @@ require('chowcho').setup({
 })
 
 -- require('flash').setup()
+require('lualine').setup({
+  sections = {
+    lualine_c = {
+      {
+        'filename',
+        path = 3,
+      }
+    },
+  },
+})
