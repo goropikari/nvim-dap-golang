@@ -160,6 +160,9 @@ require('neo-tree').setup({
     bind_to_cwd = false,
     follow_current_file = { enabled = true },
     use_libuv_file_watcher = true,
+    filtered_items = {
+      hide_dotfiles = false,
+    },
   },
   window = {
     mappings = {
