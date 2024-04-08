@@ -1,7 +1,9 @@
 -- [[ Basic Keymaps ]]
 
+local wk = require('which-key')
+
 -- document existing key chains
-require('which-key').register {
+wk.register {
   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
@@ -13,7 +15,7 @@ require('which-key').register {
 }
 -- register which-key VISUAL mode
 -- required for visual <leader>hs (hunk stage) to work
-require('which-key').register({
+wk.register({
   ['<leader>'] = { name = 'VISUAL <leader>' },
   ['<leader>h'] = { 'Git [H]unk' },
 }, { mode = 'v' })
@@ -37,9 +39,13 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<c-_>', require('Comment.api').toggle.linewise.current, { desc = 'Comment toggle linewise' })
 vim.keymap.set('x', '<c-_>', '<ESC><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>',
   { desc = 'Comment toggle linewise' })
+-- Comment:  Ctrl-.
+vim.keymap.set('n', '<c-.>', require('Comment.api').toggle.linewise.current, { desc = 'Comment toggle linewise' })
+vim.keymap.set('x', '<c-.>', '<ESC><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>',
+  { desc = 'Comment toggle linewise' })
 
 -- -- flash.nvim
--- require('which-key').register({
+-- wk.register({
 --     -- flash search
 --     l = {
 --         name = "flash",
@@ -63,7 +69,7 @@ local function common_neotest()
   nt.summary.open()
   os.execute('sleep 0.1')
 end
-require('which-key').register({
+wk.register({
   -- flash search
   t = {
     name = "[T]est",
@@ -107,6 +113,16 @@ vim.keymap.set('n', '<leader>dt', dapgo.debug_test, { desc = '[D]ebug [T]est' })
 vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
 
 -- ssh, docker 内で copy したものをホストの clipboard に入れる
-vim.keymap.set('n', '<leader>c', require('osc52').copy_operator, { expr = true })
-vim.keymap.set('n', '<leader>yy', '<leader>c_', { remap = true })
-vim.keymap.set('v', '<leader>y', require('osc52').copy_visual)
+-- vim.keymap.set('n', '<leader>c', require('osc52').copy_operator, { expr = true })
+-- vim.keymap.set('n', '<leader>yy', '<leader>c_', { remap = true })
+-- vim.keymap.set('v', '<leader>y', require('osc52').copy_visual)
+wk.register(
+  {
+    ['<leader>y'] = { name = '[Y]ank', _ = 'which_key_ignore' },
+    ["<leader>yy"] = { '"+yy', 'osc52: copy clipboard' },
+  },
+  { mode = 'n' }
+)
+wk.register({
+  ["<leader>y"] = { require('osc52').copy_visual, 'osc52: copy clipboard' }
+}, { mode = 'v' })
