@@ -73,11 +73,14 @@ wk.register({
   -- flash search
   t = {
     name = "[T]est",
-    s = { function()
-      local nt = require('neotest')
-      common_neotest()
-      nt.run.run()
-    end, "[T]est [S]ingle" },
+    s = {
+      function()
+        local nt = require('neotest')
+        common_neotest()
+        nt.run.run()
+      end,
+      "[T]est [S]ingle",
+    },
     a = { function()
       local nt = require('neotest')
       common_neotest()
@@ -101,10 +104,10 @@ wk.register({
 local dap = require('dap')
 local dapui = require('dapui')
 local dapgo = require 'dap-go'
-vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
-vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
-vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
-vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
+-- vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
+-- vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
+-- vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
+-- vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
 vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
 vim.keymap.set('n', '<leader>B', function()
   dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
@@ -113,16 +116,10 @@ vim.keymap.set('n', '<leader>dt', dapgo.debug_test, { desc = '[D]ebug [T]est' })
 vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
 
 -- ssh, docker 内で copy したものをホストの clipboard に入れる
--- vim.keymap.set('n', '<leader>c', require('osc52').copy_operator, { expr = true })
--- vim.keymap.set('n', '<leader>yy', '<leader>c_', { remap = true })
--- vim.keymap.set('v', '<leader>y', require('osc52').copy_visual)
-wk.register(
-  {
-    ['<leader>y'] = { name = '[Y]ank', _ = 'which_key_ignore' },
-    ["<leader>yy"] = { '"+yy', 'osc52: copy clipboard' },
-  },
-  { mode = 'n' }
-)
 wk.register({
-  ["<leader>y"] = { require('osc52').copy_visual, 'osc52: copy clipboard' }
+  ['<leader>y'] = { name = '[Y]ank', require('osc52').copy_operator, "osc52: copy", expr = true },
+  ["<leader>yy"] = { '<leader>y_', 'osc52: copy line', noremap = false },
+}, { mode = 'n' })
+wk.register({
+  ["<leader>y"] = { require('osc52').copy_visual, 'osc52: copy clipboard' },
 }, { mode = 'v' })
