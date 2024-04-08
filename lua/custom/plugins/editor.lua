@@ -15,7 +15,7 @@ require('gruvbox').setup({
     Comment = { fg = "#C0D4C0" }, -- line number の色を変える
   },
 })
--- vim.cmd("colorscheme gruvbox")
+vim.cmd("colorscheme gruvbox")
 
 local c = require('vscode.colors').get_colors()
 require('vscode').setup({
@@ -47,7 +47,7 @@ require('vscode').setup({
     -- Comment = { fg = "#C0D4C0" }, -- line number の色を変える
   }
 })
-vim.cmd('colorscheme gruvbox')
+-- vim.cmd('colorscheme vscode')
 
 -- [[noice.vim]]
 require("noice").setup({

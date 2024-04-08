@@ -115,6 +115,7 @@ end, { desc = 'Debug: Set Breakpoint' })
 vim.keymap.set('n', '<leader>dt', dapgo.debug_test, { desc = '[D]ebug [T]est' })
 vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
 
+-- [[ osc52 ]]
 -- ssh, docker 内で copy したものをホストの clipboard に入れる
 wk.register({
   ['<leader>y'] = { name = '[Y]ank', require('osc52').copy_operator, "osc52: copy", expr = true },
