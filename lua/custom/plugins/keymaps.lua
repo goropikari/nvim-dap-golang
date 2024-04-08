@@ -108,5 +108,5 @@ vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session resu
 
 -- ssh, docker 内で copy したものをホストの clipboard に入れる
 vim.keymap.set('n', '<leader>c', require('osc52').copy_operator, { expr = true })
-vim.keymap.set('n', '<leader>cc', '<leader>c_', { remap = true })
-vim.keymap.set('v', '<leader>c', require('osc52').copy_visual)
+vim.keymap.set('n', '<leader>yy', '<leader>c_', { remap = true })
+vim.keymap.set('v', '<leader>y', require('osc52').copy_visual)
