@@ -20,6 +20,15 @@ wk.register({
   ['<leader>h'] = { 'Git [H]unk' },
 }, { mode = 'v' })
 
+wk.register({
+  ['<leader>cd'] = { function() vim.cmd(':tcd ' .. vim.fn.expand("%:p:h")) end, 'change directory of current file' },
+  ['<leader>ce'] = { function()
+    vim.cmd(':tabnew ~/.config/nvim/init.lua')
+    vim.cmd(':tcd ~/.config/nvim')
+    vim.cmd('Neotree show')
+  end, 'edit neovim config' }
+}, { mode = 'n' })
+
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 -- vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -66,7 +75,6 @@ local function common_neotest()
   os.execute('sleep 0.1')
 end
 wk.register({
-  -- flash search
   t = {
     name = "[T]est",
     s = {
@@ -113,6 +121,8 @@ wk.register({
 wk.register({
   ['<leader>y'] = { name = '[Y]ank', require('osc52').copy_operator, "osc52: copy", expr = true },
   ["<leader>yy"] = { '<leader>y_', 'osc52: copy line', noremap = false },
+  ["<leader>yr"] = { function() require('osc52').copy(vim.fn.expand('%')) end, 'osc52: copy file relative path' },
+  ["<leader>ya"] = { function() require('osc52').copy(vim.fn.expand('%:p')) end, 'osc52: copy file absolute path' },
 }, { mode = 'n' })
 wk.register({
   ["<leader>y"] = { require('osc52').copy_visual, 'osc52: copy clipboard' },

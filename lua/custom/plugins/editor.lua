@@ -3,7 +3,7 @@ require('gruvbox').setup({
   italic = {
     strings = false,
     emphasis = false,
-    comments = true,
+    comments = false,
     operators = false,
     folds = true,
   },
@@ -12,12 +12,11 @@ require('gruvbox').setup({
   bold = false,
   overrides = {
     LineNr = { fg = "#C0D4C0" },  -- line number の色を変える
-    Comment = { fg = "#C0D4C0" }, -- line number の色を変える
+    Comment = { fg = "#50B010" }, -- comment の色を変える
   },
 })
 vim.cmd("colorscheme gruvbox")
 
-local c = require('vscode.colors').get_colors()
 require('vscode').setup({
   -- Alternatively set style in setup
   -- style = 'light'
@@ -153,36 +152,37 @@ require('gitsigns').setup({
   -- end,
 })
 
-require('neo-tree').setup({
-  sources = { "filesystem", "buffers", "git_status", "document_symbols" },
-  open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline" },
-  filesystem = {
-    bind_to_cwd = false,
-    follow_current_file = { enabled = true },
-    use_libuv_file_watcher = true,
-    filtered_items = {
-      hide_dotfiles = false,
-    },
-  },
-  window = {
-    mappings = {
-      ["<space>"] = "none",
-      ["Y"] = function(state)
-        local node = state.tree:get_node()
-        local path = node:get_id()
-        vim.fn.setreg("+", path, "c")
-      end,
-    },
-  },
-  default_component_configs = {
-    indent = {
-      with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
-      expander_collapsed = "",
-      expander_expanded = "",
-      expander_highlight = "NeoTreeExpander",
-    },
-  },
-})
+-- require('neo-tree').setup({
+--   sources = { "filesystem", "buffers", "git_status", "document_symbols" },
+--   open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline" },
+--   hijack_netrw_behavior = "disabled",
+--   filesystem = {
+--     bind_to_cwd = false,
+--     follow_current_file = { enabled = true },
+--     use_libuv_file_watcher = true,
+--     filtered_items = {
+--       hide_dotfiles = false,
+--     },
+--   },
+--   window = {
+--     mappings = {
+--       ["<space>"] = "none",
+--       ["Y"] = function(state)
+--         local node = state.tree:get_node()
+--         local path = node:get_id()
+--         vim.fn.setreg("+", path, "c")
+--       end,
+--     },
+--   },
+--   default_component_configs = {
+--     indent = {
+--       with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
+--       expander_collapsed = "",
+--       expander_expanded = "",
+--       expander_highlight = "NeoTreeExpander",
+--     },
+--   },
+-- })
 
 require('chowcho').setup({
   -- Must be a single character. The length of the array is the maximum number of windows that can be moved.
