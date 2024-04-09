@@ -15,24 +15,25 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-  nmap('<leader>ca', function()
-    vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
-  end, '[C]ode [A]ction')
+  -- nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+  nmap('<F2>', vim.lsp.buf.rename, 'Rename')
+  -- nmap('<leader>ca', function()
+  --   vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
+  -- end, '[C]ode [A]ction')
 
   nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition') -- 戻るときは Ctrl-o
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  -- nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+  -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+  -- nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  -- nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+  -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration') -- prototype 宣言に飛ぶ
+  -- nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration') -- prototype 宣言に飛ぶ
   -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
   -- nmap('<leader>wl', function()
@@ -60,7 +61,48 @@ local on_attach = function(client, bufnr)
       end,
     })
   end
-end
+
+
+  local wk = require('which-key')
+  wk.register({
+    ['<leader>l'] = { name = '[L]SP', _ = 'which_key_ignore' },
+  })
+  wk.register(
+    {
+      c = {
+        name = '[C]ode',
+        a = {
+          function()
+            vim.lsp.buf.code_action {
+              context = {
+                only = { 'quickfix', 'refactor', 'source' },
+              },
+            }
+          end,
+          '[C]ode [A]ction'
+        }
+      },
+      d = {
+        s = { require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols' },
+        S = { vim.lsp.buf.signature_help, 'Signature Documentation' },
+        h = { vim.lsp.buf.hover, 'Hover Documentation' },
+      },
+      f = { function(_) vim.lsp.buf.format() end, 'Format' },
+      g = {
+        name = '[Go]to',
+        d = { require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition' },
+        D = { vim.lsp.buf.declaration, '[G]oto [D]eclaration' },
+        r = { require('telescope.builtin').lsp_references, '[G]oto [R]eferences' },
+        I = { require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation' },
+      },
+      K = { vim.lsp.buf.hover, 'Hover Documentation' },
+      k = { vim.lsp.buf.signature_help, 'Signature Documentation' },
+      ['r'] = { name = '[R]e[n]ame', _ = 'which_key_ignore' },
+      ['rn'] = { vim.lsp.buf.rename, '[R]e[n]ame' },
+    },
+    { prefix = '<leader>l' }
+  )
+end -- on_attach
 
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.

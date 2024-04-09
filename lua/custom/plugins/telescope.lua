@@ -11,6 +11,8 @@
 --   },
 -- }
 
+local wk = require('which-key')
+
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
@@ -60,8 +62,11 @@ vim.keymap.set('n', '<leader>/', function()
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
-vim.keymap.set('n', '<c-p>', require('telescope.builtin').find_files)     -- Ctrl-p でファイル検索
-vim.keymap.set('n', '<leader>p', require('telescope.builtin').find_files) -- <leader>-p でファイル検索
+vim.keymap.set('n', '<c-p>', require('telescope.builtin').find_files) -- Ctrl-p でファイル検索
+-- vim.keymap.set('n', '<leader>p', require('telescope.builtin').find_files) -- <leader>-p でファイル検索
+wk.register({
+  ['<leader>p'] = { require('telescope.builtin').find_files, 'search file' }
+}, { mode = 'n' })
 
 local function telescope_live_grep_open_files()
   require('telescope.builtin').live_grep {
