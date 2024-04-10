@@ -119,7 +119,7 @@ wk.register({
 -- [[ osc52 ]]
 -- ssh, docker 内で copy したものをホストの clipboard に入れる
 wk.register({
-  ['<leader>y'] = { name = '[Y]ank', require('osc52').copy_operator, "osc52: copy", expr = true },
+  ['<leader>y']  = { name = '[Y]ank', require('osc52').copy_operator, "osc52: copy", expr = true },
   ["<leader>yy"] = { '<leader>y_', 'osc52: copy line', noremap = false },
   ["<leader>yr"] = { function() require('osc52').copy(vim.fn.expand('%')) end, 'osc52: copy file relative path' },
   ["<leader>ya"] = { function() require('osc52').copy(vim.fn.expand('%:p')) end, 'osc52: copy file absolute path' },
@@ -130,8 +130,8 @@ wk.register({
 
 -- [[ Noice ]]
 wk.register({
-  ['<leader>nl'] = { function() require("noice").cmd("last") end, "[N]oice [L]ast" }
-})
+  l = { function() require("noice").cmd("last") end, "[N]oice [L]ast" }
+}, { prefix = '<leader>n', desc = '[N]oice' })
 
 -- [[ gitsigns ]]
 require('gitsigns')
@@ -196,3 +196,21 @@ wk.register(jump_hunk, { mode = 'n', expr = true })
 --     'select git hunk'
 --   }
 -- }, { mode = { 'o', 'x' } })
+
+-- [[ kylechui/nvim-surround ]]
+wk.register({
+  s = { name = 'surround', _ = 'which_key_ignore' }
+}, { mode = { 'n', 'v' } })
+wk.register({
+  a = { '<Plug>(nvim-surround-normal)iw', 'add: [char]' },
+  d = { '<Plug>(nvim-surround-delete)', 'delete: [char]' },
+  r = { '<Plug>(nvim-surround-change)', 'replace: [from][to]' },
+}, { prefix = 's', mode = 'n' })
+wk.register({
+  a = { '<Plug>(nvim-surround-visual)', 'add: [char]' },
+}, { prefix = 's', mode = 'v' })
+
+-- [[ vim-easy-align ]]
+wk.register({
+  ['<leader>A'] = { '<Plug>(EasyAlign)*', 'align' },
+}, { mode = 'v' })
