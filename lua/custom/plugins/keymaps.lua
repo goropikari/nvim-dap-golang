@@ -112,6 +112,11 @@ wk.register({
   d = {
     name = 'Debug',
     b = { dap.toggle_breakpoint, 'Debug: Toggle Breakpoint' },
+    c = {
+      function() dap.toggle_breakpoint(vim.fn.input('debug condition: ')) end,
+      'Debug: Toggle Conditional Breakpoint',
+    },
+    C = { dap.clear_breakpoints, 'Debug: Clear Breakpoint' },
     t = { dapgo.debug_test, '[D]ebug Go [T]est' }
   },
 }, { prefix = '<leader>', mode = 'n' })
