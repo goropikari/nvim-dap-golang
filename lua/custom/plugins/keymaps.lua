@@ -25,7 +25,7 @@ wk.register({
   ['<leader>ce'] = { function()
     vim.cmd(':tabnew ~/.config/nvim/init.lua')
     vim.cmd(':tcd ~/.config/nvim')
-    vim.cmd('Neotree show')
+    -- vim.cmd('Neotree show')
   end, 'edit neovim config' }
 }, { mode = 'n' })
 

@@ -2,4 +2,25 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {}
+return {
+  -- [[ Setting options ]]
+  require 'custom.plugins.base',
+  require 'custom.plugins.editor',
+
+  -- [[ Basic Keymaps ]]
+  require 'custom.plugins.keymaps',
+
+  -- [[ Configure Telescope ]]
+  require 'custom.plugins.telescope',
+
+  -- [[ Configure Treesitter ]]
+  -- See `:help nvim-treesitter`
+  -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
+  require 'custom.plugins.treesitter',
+
+  -- [[ Configure LSP ]]
+  require 'custom.plugins.lsp',
+
+  -- [[ Configure Test ]]
+  require 'custom.plugins.test',
+}
