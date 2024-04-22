@@ -49,3 +49,12 @@ vim.o.termguicolors = true
 vim.o.foldmethod = 'indent'
 vim.o.foldlevel = 99 -- 起動時にコードの折りたたみを無効にした状態で開く
 -- vim.api.nvim_command('set nofoldenable') -- 起動時にコードの折りたたみを無効にした状態で開く
+
+-- VSCode の設定ファイルは jsonc として認識する
+vim.filetype.add({
+  filename = {
+    ['devcontainer.json'] = 'jsonc',
+    ['launch.json']       = 'jsonc',
+    ['settings.json']     = 'jsonc',
+  }
+})
