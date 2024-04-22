@@ -14,7 +14,9 @@ require('neotest').setup({
   output = { open_on_run = true },
   -- your neotest config here
   adapters = {
-    require("neotest-go"),
+    require("neotest-go")({
+      args = { "--shuffle=on" },
+    }),
   },
 })
 
