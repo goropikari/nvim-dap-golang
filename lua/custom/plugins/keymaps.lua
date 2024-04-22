@@ -128,6 +128,7 @@ wk.register({
   ["<leader>yy"] = { '<leader>y_', 'osc52: copy line', noremap = false },
   ["<leader>yr"] = { function() require('osc52').copy(vim.fn.expand('%')) end, 'osc52: copy file relative path' },
   ["<leader>ya"] = { function() require('osc52').copy(vim.fn.expand('%:p')) end, 'osc52: copy file absolute path' },
+  ["<leader>yf"] = { function() require('osc52').copy(vim.fn.expand('%:t')) end, 'osc52: copy current file name' },
 }, { mode = 'n' })
 wk.register({
   ["<leader>y"] = { require('osc52').copy_visual, 'osc52: copy clipboard' },
@@ -135,7 +136,8 @@ wk.register({
 
 -- [[ Noice ]]
 wk.register({
-  l = { function() require("noice").cmd("last") end, "[N]oice [L]ast" }
+  e = { function() require("noice").cmd("error") end, "[N]oice [E]rror" },
+  l = { function() require("noice").cmd("last") end, "[N]oice [L]ast" },
 }, { prefix = '<leader>n', desc = '[N]oice' })
 
 -- [[ gitsigns ]]
@@ -219,3 +221,25 @@ wk.register({
 wk.register({
   ['<leader>A'] = { '<Plug>(EasyAlign)*', 'align' },
 }, { mode = 'v' })
+
+-- [[ barbar.nvim ]]
+wk.register({
+  ['<leader>b'] = {
+    name = '[B]uffer',
+    c = {
+      name = '[B]uffer [C]lear',
+      c = {
+        '<Cmd>BufferClose<CR><Cmd>q<CR>', 'close buffer'
+      },
+      a = {
+        '<Cmd>BufferCloseAllButCurrent<CR><C-w><C-o><CR>', 'close all buffer but current'
+      },
+    },
+    n = {
+      '<Cmd>BufferNext<CR>', '[B]uffer [N]ext'
+    },
+    N = {
+      '<Cmd>BufferPrevious<CR>', '[B]uffer [P]revious'
+    },
+  }
+})
