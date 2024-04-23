@@ -81,7 +81,9 @@ wk.register({
       function()
         local nt = require('neotest')
         common_neotest()
-        nt.run.run()
+        local exrc = vim.g.exrc
+        local env = (exrc and exrc.neotest and exrc.neotest.env) or {}
+        nt.run.run({ env = env })
       end,
       "[T]est [S]ingle",
     },
