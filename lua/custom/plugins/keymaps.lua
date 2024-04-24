@@ -69,37 +69,27 @@ vim.keymap.set('n', '<c-t>', function() vim.cmd('ToggleTerm') end)
 vim.keymap.set('t', '<c-t>', function() vim.cmd('ToggleTerm') end)
 
 -- [[ neotest ]]
-local function common_neotest()
-  local nt = require('neotest')
-  nt.summary.open()
-  os.execute('sleep 0.1')
-end
+local nt = require('neotest')
 wk.register({
   t = {
     name = "[T]est",
     s = {
       function()
-        local nt = require('neotest')
-        common_neotest()
         local exrc = vim.g.exrc
         local env = (exrc and exrc.neotest and exrc.neotest.env) or {}
         nt.run.run({ env = env })
+        nt.summary.open()
       end,
       "[T]est [S]ingle",
     },
     a = { function()
-      local nt = require('neotest')
-      common_neotest()
       nt.run.run(vim.fn.expand('%'))
+      nt.summary.open()
     end, "[T]est [A]ll" },
     d = { function()
-      local nt = require('neotest')
-      common_neotest()
       nt.run.run({ strategy = "dap" })
     end, "[T]est [D]ebug" },
     o = { function()
-      local nt = require('neotest')
-      common_neotest()
       nt.output.open()
     end, "[T]est [O]utput" },
   },
@@ -108,7 +98,6 @@ wk.register({
 -- [[ nvim-dap ]]
 -- Basic debugging keymaps, feel free to change to your liking!
 local dap = require('dap')
-local dapui = require('dapui')
 local dapgo = require 'dap-go'
 wk.register({
   d = {
