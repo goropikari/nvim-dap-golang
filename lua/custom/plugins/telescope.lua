@@ -62,10 +62,15 @@ vim.keymap.set('n', '<leader>/', function()
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
-vim.keymap.set('n', '<c-p>', require('telescope.builtin').find_files) -- Ctrl-p でファイル検索
+-- vim.keymap.set('n', '<c-p>', require('telescope.builtin').find_files) -- Ctrl-p でファイル検索
 -- vim.keymap.set('n', '<leader>p', require('telescope.builtin').find_files) -- <leader>-p でファイル検索
 wk.register({
-  ['<leader>p'] = { require('telescope.builtin').find_files, 'search file' }
+  ['<leader>p'] = {
+    function()
+      require('telescope.builtin').find_files({ hidden = true })
+    end,
+    'search file',
+  }
 }, { mode = 'n' })
 
 local function telescope_live_grep_open_files()
