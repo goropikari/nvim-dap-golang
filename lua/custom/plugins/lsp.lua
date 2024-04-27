@@ -163,6 +163,7 @@ local servers = {
   },
   ruby_ls = {},
   rubocop = {},
+  typos_lsp = {},
   -- pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},

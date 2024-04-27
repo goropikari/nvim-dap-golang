@@ -48,8 +48,12 @@ wk.register({
 -- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Comment:  Ctrl-/
+-- terminal によって Ctrl-/ を Ctrl-_ に認識することがある。逆もしかり
 vim.keymap.set('n', '<c-_>', require('Comment.api').toggle.linewise.current, { desc = 'Comment toggle linewise' })
+vim.keymap.set('n', '<c-/>', require('Comment.api').toggle.linewise.current, { desc = 'Comment toggle linewise' })
 vim.keymap.set('x', '<c-_>', '<ESC><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>',
+  { desc = 'Comment toggle linewise' })
+vim.keymap.set('x', '<c-/>', '<ESC><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>',
   { desc = 'Comment toggle linewise' })
 
 -- 開いている window を番号で選択する

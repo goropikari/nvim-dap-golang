@@ -67,7 +67,7 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 wk.register({
   ['<leader>p'] = {
     function()
-      require('telescope.builtin').find_files({ hidden = true })
+      require('telescope.builtin').find_files({ hidden = true, file_ignore_patterns = { ".git/" } })
     end,
     'search file',
   }
