@@ -30,43 +30,43 @@ local go_dap_adapter_name = "delve"
 local ruby_dap_adapter_name = "rdbg"
 
 -- .vscode/launch.json に書かれた remote debug の設定を nvim-dap で使える形に変更する
-local function vscode_config_to_nvim_config()
-  -- [[golang]]
-  if dap.configurations.go ~= nil then
-    for i, config in ipairs(dap.configurations.go) do
-      if config.mode == "remote" or (config.debugAdapter == "dlv-dap" and config.mode == "remote") then
-        config.type = go_dap_adapter_name
-        dap.configurations.go[i] = config
-      end
-    end
-  end
-
-  -- [[ ruby ]]
-  if dap.configurations.ruby ~= nil then
-    for i, config in ipairs(dap.configurations.ruby) do
-      if config.mode == "remote" or (config.debugAdapter == "rdbg" and config.mode == "remote") or config.debugPort ~= nil then
-        config.type = ruby_dap_adapter_name
-        dap.configurations.ruby[i] = config
-      end
-    end
-  end
-  if dap.configurations.rdbg ~= nil then
-    for _, config in ipairs(dap.configurations.rdbg) do
-      table.insert(dap.configurations.ruby, config)
-    end
-  end
-
-  -- [[ c++ ]]
-  if dap.configurations.cppdbg ~= nil then
-    for _, config in ipairs(dap.configurations.cppdbg) do
-      if config.request == 'launch' then
-        config.prehook = function()
-          vim.fn.system({ 'g++', '-g', '-O0', vim.fn.expand('%'), '-o', vim.fn.expand('%:r') })
-        end
-      end
-    end
-  end
-end
+-- local function vscode_config_to_nvim_config()
+--   -- [[golang]]
+--   if dap.configurations.go ~= nil then
+--     for i, config in ipairs(dap.configurations.go) do
+--       if config.mode == "remote" or (config.debugAdapter == "dlv-dap" and config.mode == "remote") then
+--         config.type = go_dap_adapter_name
+--         dap.configurations.go[i] = config
+--       end
+--     end
+--   end
+--
+--   -- [[ ruby ]]
+--   if dap.configurations.ruby ~= nil then
+--     for i, config in ipairs(dap.configurations.ruby) do
+--       if config.mode == "remote" or (config.debugAdapter == "rdbg" and config.mode == "remote") or config.debugPort ~= nil then
+--         config.type = ruby_dap_adapter_name
+--         dap.configurations.ruby[i] = config
+--       end
+--     end
+--   end
+--   if dap.configurations.rdbg ~= nil then
+--     for _, config in ipairs(dap.configurations.rdbg) do
+--       table.insert(dap.configurations.ruby, config)
+--     end
+--   end
+--
+--   -- [[ c++ ]]
+--   if dap.configurations.cppdbg ~= nil then
+--     for _, config in ipairs(dap.configurations.cppdbg) do
+--       if config.request == 'launch' then
+--         config.prehook = function()
+--           vim.fn.system({ 'g++', '-g', '-O0', vim.fn.expand('%'), '-o', vim.fn.expand('%:r') })
+--         end
+--       end
+--     end
+--   end
+-- end
 
 
 -- Dap UI setup
@@ -110,8 +110,11 @@ require('dap-go').setup({ -- Additional dap configurations can be added.
   }
 })
 require('dap-ruby').setup()
-require('dap.ext.vscode').load_launchjs() -- .vscode/launch.json を読み込む
-vscode_config_to_nvim_config()            -- すべての config が読み込まれたあとに実行する
+require('dap.ext.vscode').load_launchjs(nil, {
+  go = { 'go', 'dlv-dap' },
+  cpp = { 'c', 'cpp', 'cppdbg' },
+}) -- .vscode/launch.json を読み込む
+-- vscode_config_to_nvim_config()            -- すべての config が読み込まれたあとに実行する
 
 dap.adapters[go_dap_adapter_name] = function(callback, config)
   callback({ type = 'server', host = config.host, port = config.port })
@@ -169,5 +172,5 @@ table.insert(dap.configurations.cpp, {
   program = "${workspaceFolder}/${fileBasenameNoExtension}",
   cwd = "${workspaceFolder}",
   stopAtBeginningOfMainSubprogram = false,
-  -- args = { "<", "test.txt" },
+  args = { "<", "test.txt" },
 })
