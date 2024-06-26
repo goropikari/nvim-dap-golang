@@ -201,7 +201,8 @@ wk.register(jump_hunk, { mode = 'n', expr = true })
 
 -- [[ kylechui/nvim-surround ]]
 wk.register({
-  s = { name = 'surround', _ = 'which_key_ignore' }
+  s = { name = 'surround', _ = 'which_key_ignore' },
+  ['<leader>s'] = { name = 'surround', _ = 'which_key_ignore' }
 }, { mode = { 'n', 'v' } })
 wk.register({
   a = { '<Plug>(nvim-surround-normal)iw', 'add: [char]' },
@@ -211,6 +212,17 @@ wk.register({
 wk.register({
   a = { '<Plug>(nvim-surround-visual)', 'add: [char]' },
 }, { prefix = 's', mode = 'v' })
+
+wk.register({
+  a = { '<Plug>(nvim-surround-normal)iw', 'add: [char]' },
+  d = { '<Plug>(nvim-surround-delete)', 'delete: [char]' },
+  r = { '<Plug>(nvim-surround-change)', 'replace: [from][to]' },
+}, { prefix = '<leader>s', mode = 'n' })
+wk.register({
+  a = { '<Plug>(nvim-surround-visual)', 'add: [char]' },
+}, { prefix = '<leader>s', mode = 'v' })
+
+
 
 -- [[ vim-easy-align ]]
 wk.register({
