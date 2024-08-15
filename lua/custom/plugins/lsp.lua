@@ -53,11 +53,11 @@ local on_attach = function(client, bufnr)
       group = augroup,
       buffer = bufnr,
       callback = function()
+        vim.lsp.buf.format()
         vim.lsp.buf.code_action({
           context = { only = { "source.organizeImports" } }, -- 保存時に自動的に goimports するときに必要
           apply = true,
         })
-        vim.lsp.buf.format()
       end,
     })
   end
