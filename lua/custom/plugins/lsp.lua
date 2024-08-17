@@ -157,8 +157,20 @@ require('mason-lspconfig').setup()
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  -- clangd = {},
-  gopls = {
+  html = { filetypes = { 'html', 'twig', 'hbs' } },
+  typos_lsp = {},
+  lua_ls = {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+      -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+      -- diagnostics = { disable = { 'missing-fields' } },
+    },
+  },
+}
+
+if vim.fn.executable('go') == 1 then
+  servers.gopls = {
     -- keys = {
     --   -- Workaround for the lack of a DAP strategy in neotest-go: https://github.com/nvim-neotest/neotest-go/issues/12
     --   { "<leader>td", "<cmd>lua require('dap-go').debug_test()<CR>", desc = "Debug Nearest (Go)" },
@@ -199,24 +211,16 @@ local servers = {
         semanticTokens = true,
       },
     },
-  },
-  -- ruby_ls = {},
-  -- rubocop = {},
-  typos_lsp = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
-  -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+  }
+end
 
-  lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-      -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-      -- diagnostics = { disable = { 'missing-fields' } },
-    },
-  },
-}
+if vim.fn.executable('ruby') == 1 then
+  servers.ruby_lsp = {}
+end
+
+if vim.fn.executable('clangd') == 1 then
+  servers.clangd = {}
+end
 
 -- Setup neovim lua configuration
 require('neodev').setup()

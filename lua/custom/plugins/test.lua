@@ -139,13 +139,7 @@ dap.adapters[ruby_dap_adapter_name] = function(callback, config)
 end
 
 -- [[  cpp debug ]]
-local cpptools_path = vim.fn.stdpath('data') .. '/cpptools'
-if not vim.loop.fs_stat(cpptools_path) then
-  -- vscode 用の dap adapter だが preLaunchTask までは扱ってくれないもよう
-  vim.fn.system { 'wget', 'https://github.com/microsoft/vscode-cpptools/releases/download/v.1.19.4/cpptools-linux.vsix', '-O', vim.fn.stdpath('data') .. '/cpptools-linux.vsix' }
-  vim.fn.system { 'unzip', vim.fn.stdpath('data') .. '/cpptools-linux.vsix', '-d', cpptools_path }
-  vim.fn.system { 'chmod', '+x', cpptools_path .. '/extension/debugAdapters/bin/OpenDebugAD7' }
-end
+local cpptools_path = vim.fn.stdpath('data') .. '/mason/packages/cpptools'
 dap.adapters.cppdbg = {
   id = 'cppdbg',
   type = 'executable',
@@ -173,4 +167,18 @@ table.insert(dap.configurations.cpp, {
   cwd = "${workspaceFolder}",
   stopAtBeginningOfMainSubprogram = false,
   args = { "<", "test.txt" },
+})
+
+-- dap adapter
+local dap_adapters = {}
+if vim.fn.executable('go') == 1 then
+  table.insert(dap_adapters, 'delve')
+end
+if vim.fn.executable('g++') == 1 then
+  table.insert(dap_adapters, 'cpptools')
+end
+
+require("mason-nvim-dap").setup({
+  automatic_installation = true,
+  ensure_installed = dap_adapters
 })
