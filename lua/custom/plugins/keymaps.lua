@@ -3,31 +3,39 @@
 local wk = require('which-key')
 
 -- document existing key chains
-wk.register {
-  ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-  -- ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-  -- ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-  ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
-  -- ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-  ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-  -- ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-  -- ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-}
--- register which-key VISUAL mode
--- required for visual <leader>hs (hunk stage) to work
-wk.register({
-  ['<leader>'] = { name = 'VISUAL <leader>' },
-  ['<leader>h'] = { 'Git [H]unk' },
-}, { mode = 'v' })
+wk.add(
+  {
+    { "<leader>c",  group = "Code" },
+    { "<leader>c_", hidden = true },
+    { "<leader>h",  group = "Git Hunk" },
+    { "<leader>h_", hidden = true },
+    { "<leader>s",  group = "Search" },
+    { "<leader>s_", hidden = true },
+  }
+)
 
-wk.register({
-  ['<leader>cd'] = { function() vim.cmd(':tcd ' .. vim.fn.expand("%:p:h")) end, 'change directory of current file' },
-  ['<leader>ce'] = { function()
-    vim.cmd(':tabnew ~/.config/nvim/init.lua')
-    vim.cmd(':tcd ~/.config/nvim')
-    -- vim.cmd('Neotree show')
-  end, 'edit neovim config' }
-}, { mode = 'n' })
+-- required for visual <leader>hs (hunk stage) to work
+wk.add(
+  {
+    { "<leader>",  group = "VISUAL <leader>", mode = "v" },
+    { "<leader>h", desc = "Git Hunk",         mode = "v" },
+  }
+)
+
+wk.add(
+  {
+    { "<leader>cd", function() vim.cmd(':tcd ' .. vim.fn.expand("%:p:h")) end, desc = "change directory of current file" },
+    {
+      "<leader>ce",
+      function()
+        vim.cmd(':tabnew ~/.config/nvim/init.lua')
+        vim.cmd(':tcd ~/.config/nvim')
+        -- vim.cmd('Neotree show')
+      end,
+      desc = "edit neovim config"
+    },
+  }
+)
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
@@ -38,10 +46,12 @@ wk.register({
 -- vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- Diagnostic keymaps
-wk.register({
-  e = { vim.diagnostic.open_float, 'Open floating diagnostic message' },
-  q = { vim.diagnostic.setloclist, 'Open diagnostics list' },
-}, { mode = 'n', prefix = '<leader>' })
+wk.add(
+  {
+    { "<leader>e", vim.diagnostic.open_float, desc = "Open floating diagnostic message" },
+    { "<leader>q", vim.diagnostic.setloclist, desc = "Open diagnostics list" },
+  }
+)
 -- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 -- vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 -- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
@@ -57,15 +67,12 @@ vim.keymap.set('x', '<c-/>', '<ESC><CMD>lua require("Comment.api").locked("toggl
   { desc = 'Comment toggle linewise' })
 
 -- 開いている window を番号で選択する
-wk.register({
-  ["<leader>C"] = {
-    name = '[C]hoose',
-    C = {
-      require('chowcho').run,
-      "choose window",
-    }
+wk.add(
+  {
+    { "<leader>C",  group = "Choose" },
+    { "<leader>CC", require('chowcho').run, desc = "choose window" },
   }
-}, { mode = 'n' })
+)
 
 -- terminal mode を escape で抜ける
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])
@@ -74,179 +81,267 @@ vim.keymap.set('t', '<c-t>', function() vim.cmd('ToggleTerm') end)
 
 -- [[ neotest ]]
 local nt = require('neotest')
-wk.register({
-  t = {
-    name = "[T]est",
-    s = {
+wk.add(
+  {
+    { "<leader>t", group = "Test" },
+    {
+      "<leader>ta",
+      function()
+        nt.run.run(vim.fn.expand('%'))
+        nt.summary.open()
+      end,
+      desc = "Test All"
+    },
+    {
+      "<leader>td",
+      function()
+        nt.run.run({ strategy = "dap" })
+      end,
+      desc = "Test Debug"
+    },
+    {
+      "<leader>to",
+      function()
+        nt.output.open()
+      end,
+      desc = "Test Output"
+    },
+    {
+      "<leader>ts",
       function()
         local exrc = vim.g.exrc
         local env = (exrc and exrc.neotest and exrc.neotest.env) or {}
         nt.run.run({ env = env })
         nt.summary.open()
       end,
-      "[T]est [S]ingle",
+      desc = "Test Single"
     },
-    a = { function()
-      nt.run.run(vim.fn.expand('%'))
-      nt.summary.open()
-    end, "[T]est [A]ll" },
-    d = { function()
-      nt.run.run({ strategy = "dap" })
-    end, "[T]est [D]ebug" },
-    o = { function()
-      nt.output.open()
-    end, "[T]est [O]utput" },
-  },
-}, { prefix = "<leader>" })
+  }
+)
 
 -- [[ nvim-dap ]]
 -- Basic debugging keymaps, feel free to change to your liking!
 local dap = require('dap')
 local dapgo = require 'dap-go'
-wk.register({
-  d = {
-    name = 'Debug',
-    b = { dap.toggle_breakpoint, 'Debug: Toggle Breakpoint' },
-    c = {
-      function() dap.toggle_breakpoint(vim.fn.input('debug condition: ')) end,
-      'Debug: Toggle Conditional Breakpoint',
+wk.add(
+  {
+    { "<leader>d", group = "Debug" },
+    {
+      "<leader>dC",
+      dap.clear_breakpoints,
+      desc = "Debug: Clear Breakpoint",
     },
-    C = { dap.clear_breakpoints, 'Debug: Clear Breakpoint' },
-    t = { dapgo.debug_test, '[D]ebug Go [T]est' }
-  },
-}, { prefix = '<leader>', mode = 'n' })
+    {
+      "<leader>db",
+      dap.toggle_breakpoint,
+      desc = "Debug: Toggle Breakpoint",
+    },
+    {
+      "<leader>dc",
+      function() dap.toggle_breakpoint(vim.fn.input('debug condition: ')) end,
+      desc = "Debug: Toggle Conditional Breakpoint",
+    },
+    {
+      "<leader>dt",
+      dapgo.debug_test,
+      desc = "Debug Go Test",
+    },
+  }
+)
 
 -- [[ osc52 ]]
 -- ssh, docker 内で copy したものをホストの clipboard に入れる
-wk.register({
-  ['<leader>y']  = { name = '[Y]ank', require('osc52').copy_operator, "osc52: copy", expr = true },
-  ["<leader>yy"] = { '<leader>y_', 'osc52: copy line', noremap = false },
-  ["<leader>yr"] = { function() require('osc52').copy(vim.fn.expand('%')) end, 'osc52: copy file relative path' },
-  ["<leader>ya"] = { function() require('osc52').copy(vim.fn.expand('%:p')) end, 'osc52: copy file absolute path' },
-  ["<leader>yf"] = { function() require('osc52').copy(vim.fn.expand('%:t')) end, 'osc52: copy current file name' },
-}, { mode = 'n' })
-wk.register({
-  ["<leader>y"] = { require('osc52').copy_visual, 'osc52: copy clipboard' },
-}, { mode = 'v' })
+wk.add(
+  {
+    {
+      "<leader>y",
+      expr = true,
+      group = "[Y]ank",
+      replace_keycodes = false,
+    },
+    {
+      "<leader>ya",
+      function() require('osc52').copy(vim.fn.expand('%:p')) end,
+      desc = "osc52: copy file absolute path",
+    },
+    {
+      "<leader>yf",
+      function() require('osc52').copy(vim.fn.expand('%:t')) end,
+      desc = "osc52: copy current file name",
+    },
+    {
+      "<leader>yr",
+      function() require('osc52').copy(vim.fn.expand('%')) end,
+      desc = "osc52: copy file relative path",
+    },
+    {
+      "<leader>yy",
+      "<leader>y_",
+      desc = "osc52: copy line",
+      remap = true,
+    },
+  }
+)
+wk.add(
+  {
+    { "<leader>y", require('osc52').copy_visual, desc = "osc52: copy clipboard", mode = "v" },
+  }
+)
 
 -- [[ Noice ]]
-wk.register({
-  e = { function() require("noice").cmd("error") end, "[N]oice [E]rror" },
-  l = { function() require("noice").cmd("last") end, "[N]oice [L]ast" },
-}, { prefix = '<leader>n', desc = '[N]oice' })
+wk.add(
+  {
+    { "<leader>n", desc = "Noice" },
+    {
+      "<leader>ne",
+      function() require("noice").cmd("error") end,
+      desc = "Noice Error",
+    },
+    {
+      "<leader>nl",
+      function() require("noice").cmd("last") end,
+      desc = "Noice [L]ast",
+    },
+  }
+)
 
 -- [[ gitsigns ]]
 require('gitsigns')
 local gs = package.loaded.gitsigns
-wk.register({
-  b = {
-    function()
-      gs.blame_line { full = false }
-    end,
-    'git blame line'
-  },
-  d = { gs.diffthis, 'git diff against index' },
-  D = { function() gs.diffthis '~' end, 'git diff against last commit' },
-  p = { gs.preview_hunk, 'preview git hunk' },
-  r = { gs.reset_hunk, 'git reset hunk' },
-  R = { gs.reset_buffer, 'git Reset buffer' },
-  s = { gs.stage_hunk, 'git stage hunk' },
-  S = { gs.stage_buffer, 'git Stage buffer' },
-  u = { gs.undo_stage_hunk, 'undo stage hunk' },
-}, { mode = 'n', prefix = '<leader>h', desc = 'Git [H]ank' })
-wk.register({
-  s = {
-    function() gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' } end,
-    'stage git hunk',
-  },
-  -- r = {
-  --   function() gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' } end,
-  --   'reset git hunk',
-  -- },
-}, { mode = 'v', prefix = '<leader>h' })
-local jump_hunk = {
-  ["]c"] = {
-    function()
-      if vim.wo.diff then
-        return ']c'
-      end
-      vim.schedule(function()
-        gs.next_hunk()
-      end)
-      return '<Ignore>'
-    end,
-    'Jump to next hunk'
-  },
-  ["[c"] = {
-    function()
-      if vim.wo.diff then
-        return '[c'
-      end
-      vim.schedule(function()
-        gs.prev_hunk()
-      end)
-      return '<Ignore>'
-    end,
-    'Jump to previous hunk'
-  },
-}
-wk.register(jump_hunk, { mode = 'n', expr = true })
--- wk.register(jump_hunk, { mode = 'v', expr = true })
--- wk.register({
---   ['ih'] = {
---     ':<C-U>Gitsigns select_hunk<CR>',
---     'select git hunk'
---   }
--- }, { mode = { 'o', 'x' } })
-
--- [[ kylechui/nvim-surround ]]
-wk.register({
-  s = { name = 'surround', _ = 'which_key_ignore' },
-  ['<leader>s'] = { name = 'surround', _ = 'which_key_ignore' }
-}, { mode = { 'n', 'v' } })
-wk.register({
-  a = { '<Plug>(nvim-surround-normal)iw', 'add: [char]' },
-  d = { '<Plug>(nvim-surround-delete)', 'delete: [char]' },
-  r = { '<Plug>(nvim-surround-change)', 'replace: [from][to]' },
-}, { prefix = 's', mode = 'n' })
-wk.register({
-  a = { '<Plug>(nvim-surround-visual)', 'add: [char]' },
-}, { prefix = 's', mode = 'v' })
-
-wk.register({
-  a = { '<Plug>(nvim-surround-normal)iw', 'add: [char]' },
-  d = { '<Plug>(nvim-surround-delete)', 'delete: [char]' },
-  r = { '<Plug>(nvim-surround-change)', 'replace: [from][to]' },
-}, { prefix = '<leader>s', mode = 'n' })
-wk.register({
-  a = { '<Plug>(nvim-surround-visual)', 'add: [char]' },
-}, { prefix = '<leader>s', mode = 'v' })
-
-
-
--- [[ vim-easy-align ]]
-wk.register({
-  ['<leader>A'] = { '<Plug>(EasyAlign)*', 'align' },
-}, { mode = 'v' })
-
--- [[ barbar.nvim ]]
-wk.register({
-  ['<leader>b'] = {
-    name = '[B]uffer',
-    c = {
-      name = '[B]uffer [C]lear',
-      c = {
-        '<Cmd>BufferClose<CR><Cmd>q<CR>', 'close buffer'
-      },
-      a = {
-        '<Cmd>BufferCloseAllButCurrent<CR><C-w><C-o><CR>', 'close all buffer but current'
-      },
+wk.add(
+  {
+    { "<leader>h", desc = "Git Hank" },
+    {
+      "<leader>hD",
+      function() gs.diffthis '~' end,
+      desc = "git diff against last commit",
     },
-    n = {
-      '<Cmd>BufferNext<CR>', '[B]uffer [N]ext'
+    {
+      "<leader>hR",
+      gs.reset_buffer,
+      desc = "git Reset buffer",
     },
-    N = {
-      '<Cmd>BufferPrevious<CR>', '[B]uffer [P]revious'
+    {
+      "<leader>hS",
+      gs.stage_buffer,
+      desc = "git Stage buffer",
+    },
+    {
+      "<leader>hb",
+      function()
+        gs.blame_line { full = false }
+      end,
+      desc = "git blame line",
+    },
+    {
+      "<leader>hd",
+      gs.diffthis,
+      desc = "git diff against index",
+    },
+    {
+      "<leader>hp",
+      gs.preview_hunk,
+      desc = "preview git hunk",
+    },
+    {
+      "<leader>hr",
+      gs.reset_hunk,
+      desc = "git reset hunk",
+    },
+    {
+      "<leader>hs",
+      gs.stage_hunk,
+      desc = "git stage hunk",
+    },
+    {
+      "<leader>hu",
+      gs.undo_stage_hunk,
+      desc = "undo stage hunk",
+    },
+    {
+      "<leader>hs",
+      function() gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' } end,
+      desc = "stage git hunk",
+      mode = "v",
     },
   }
-})
+)
+
+wk.add(
+  {
+    {
+      "[c",
+      function()
+        if vim.wo.diff then
+          return '[c'
+        end
+        vim.schedule(function()
+          gs.prev_hunk()
+        end)
+        return '<Ignore>'
+      end,
+      desc = "Jump to previous hunk",
+      expr = true,
+      replace_keycodes = false,
+    },
+    {
+      "]c",
+      function()
+        if vim.wo.diff then
+          return ']c'
+        end
+        vim.schedule(function()
+          gs.next_hunk()
+        end)
+        return '<Ignore>'
+      end,
+      desc = "Jump to next hunk",
+      expr = true,
+      replace_keycodes = false,
+    },
+  }
+)
+
+-- [[ kylechui/nvim-surround ]]
+wk.add(
+  {
+    {
+      mode = { "n", "v" },
+      { "<leader>s",  group = "surround" },
+      { "<leader>s_", hidden = true },
+      { "s",          group = "surround" },
+      { "s_",         hidden = true },
+    },
+  }
+)
+wk.add(
+  {
+    { "sa",         "<Plug>(nvim-surround-normal)iw", desc = "add: [char]" },
+    { "sd",         "<Plug>(nvim-surround-delete)",   desc = "delete: [char]" },
+    { "sr",         "<Plug>(nvim-surround-change)",   desc = "replace: [from][to]" },
+    { "sa",         "<Plug>(nvim-surround-visual)",   desc = "add: [char]",        mode = "v" },
+    { "<leader>sa", "<Plug>(nvim-surround-normal)iw", desc = "add: [char]" },
+    { "<leader>sd", "<Plug>(nvim-surround-delete)",   desc = "delete: [char]" },
+    { "<leader>sr", "<Plug>(nvim-surround-change)",   desc = "replace: [from][to]" },
+    { "<leader>sa", "<Plug>(nvim-surround-visual)",   desc = "add: [char]",        mode = "v" },
+  }
+)
+
+-- [[ vim-easy-align ]]
+wk.add(
+  {
+    { "<leader>A", "<Plug>(EasyAlign)*", desc = "align", mode = "v" },
+  }
+)
+
+-- [[ barbar.nvim ]]
+wk.add(
+  {
+    { "<leader>b",   group = "Buffer" },
+    { "<leader>bN",  "<Cmd>BufferPrevious<CR>",                         desc = "Buffer Previous" },
+    { "<leader>bc",  group = "Buffer Clear" },
+    { "<leader>bca", "<Cmd>BufferCloseAllButCurrent<CR><C-w><C-o><CR>", desc = "close all buffer but current" },
+    { "<leader>bcc", "<Cmd>BufferClose<CR><Cmd>q<CR>",                  desc = "close buffer" },
+    { "<leader>bn",  "<Cmd>BufferNext<CR>",                             desc = "Buffer Next" },
+  }
+)

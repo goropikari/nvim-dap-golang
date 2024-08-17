@@ -15,30 +15,30 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  -- nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+  -- nmap('<leader>rn', vim.lsp.buf.rename, 'Rename')
   nmap('<F2>', vim.lsp.buf.rename, 'Rename')
   -- nmap('<leader>ca', function()
   --   vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
   -- end, '[C]ode [A]ction')
 
-  nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition') -- 戻るときは Ctrl-o
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  -- nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  -- nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto Definition') -- 戻るときは Ctrl-o
+  nmap('gr', require('telescope.builtin').lsp_references, 'Goto References')
+  nmap('gI', require('telescope.builtin').lsp_implementations, 'Goto Implementation')
+  -- nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type Definition')
+  -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, 'Document Symbols')
+  -- nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace Symbols')
 
   -- See `:help K` for why this keymap
   -- nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
   -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
-  -- nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration') -- prototype 宣言に飛ぶ
+  -- nmap('gD', vim.lsp.buf.declaration, 'Goto Declaration') -- prototype 宣言に飛ぶ
   -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+  -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace Remove Folder')
   -- nmap('<leader>wl', function()
   --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  -- end, '[W]orkspace [L]ist Folders')
+  -- end, 'Workspace List Folders')
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -64,43 +64,82 @@ local on_attach = function(client, bufnr)
 
 
   local wk = require('which-key')
-  wk.register({
-    ['<leader>l'] = { name = '[L]SP', _ = 'which_key_ignore' },
-  })
-  wk.register(
+  wk.add(
     {
-      c = {
-        name = '[C]ode',
-        a = {
-          function()
-            vim.lsp.buf.code_action {
-              context = {
-                only = { 'quickfix', 'refactor', 'source' },
-              },
-            }
-          end,
-          '[C]ode [A]ction'
-        }
+      { "<leader>l",  group = "[L]SP" },
+      { "<leader>l_", hidden = true },
+      {
+        "<leader>lK",
+        vim.lsp.buf.hover,
+        desc = "Hover Documentation",
       },
-      d = {
-        s = { require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols' },
-        S = { vim.lsp.buf.signature_help, 'Signature Documentation' },
-        h = { vim.lsp.buf.hover, 'Hover Documentation' },
+      { "<leader>lc", group = "[C]ode" },
+      {
+        "<leader>lca",
+        function()
+          vim.lsp.buf.code_action {
+            context = {
+              only = { 'quickfix', 'refactor', 'source' },
+            },
+          }
+        end,
+        desc = "[C]ode [A]ction",
       },
-      f = { function(_) vim.lsp.buf.format() end, 'Format' },
-      g = {
-        name = '[Go]to',
-        d = { require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition' },
-        D = { vim.lsp.buf.declaration, '[G]oto [D]eclaration' },
-        r = { require('telescope.builtin').lsp_references, '[G]oto [R]eferences' },
-        I = { require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation' },
+      {
+        "<leader>ldS",
+        vim.lsp.buf.signature_help,
+        desc = "Signature Documentation",
       },
-      K = { vim.lsp.buf.hover, 'Hover Documentation' },
-      k = { vim.lsp.buf.signature_help, 'Signature Documentation' },
-      ['r'] = { name = '[R]e[n]ame', _ = 'which_key_ignore' },
-      ['rn'] = { vim.lsp.buf.rename, '[R]e[n]ame' },
-    },
-    { prefix = '<leader>l' }
+      {
+        "<leader>ldh",
+        vim.lsp.buf.hover,
+        desc = "Hover Documentation",
+      },
+      {
+        "<leader>lds",
+        require('telescope.builtin').lsp_document_symbols,
+        desc = "Document Symbols",
+      },
+      {
+        "<leader>lf",
+        function(_) vim.lsp.buf.format() end,
+        desc = "Format",
+      },
+      { "<leader>lg", group = "Goto" },
+      {
+        "<leader>lgD",
+        vim.lsp.buf.declaration,
+        desc = "Goto Declaration",
+      },
+      {
+        "<leader>lgI",
+        require('telescope.builtin').lsp_implementations,
+        desc = "Goto Implementation",
+      },
+      {
+        "<leader>lgd",
+        require('telescope.builtin').lsp_definitions,
+        desc = "Goto Definition",
+      },
+      {
+        "<leader>lgr",
+        require('telescope.builtin').lsp_references,
+        desc = "Goto References",
+      },
+      {
+        "<leader>lk",
+        vim.lsp.buf.signature_help,
+        desc = "Signature Documentation",
+      },
+      { "<leader>lr",  group = "Rename" },
+      { "<leader>lr_", hidden = true },
+      {
+        "<leader>lrn",
+        vim.lsp.buf.rename,
+        desc = "Rename",
+      },
+
+    }
   )
 end -- on_attach
 
