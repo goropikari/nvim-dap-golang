@@ -29,46 +29,6 @@ require('telescope').load_extension('dap')
 local go_dap_adapter_name = "delve"
 local ruby_dap_adapter_name = "rdbg"
 
--- .vscode/launch.json に書かれた remote debug の設定を nvim-dap で使える形に変更する
--- local function vscode_config_to_nvim_config()
---   -- [[golang]]
---   if dap.configurations.go ~= nil then
---     for i, config in ipairs(dap.configurations.go) do
---       if config.mode == "remote" or (config.debugAdapter == "dlv-dap" and config.mode == "remote") then
---         config.type = go_dap_adapter_name
---         dap.configurations.go[i] = config
---       end
---     end
---   end
---
---   -- [[ ruby ]]
---   if dap.configurations.ruby ~= nil then
---     for i, config in ipairs(dap.configurations.ruby) do
---       if config.mode == "remote" or (config.debugAdapter == "rdbg" and config.mode == "remote") or config.debugPort ~= nil then
---         config.type = ruby_dap_adapter_name
---         dap.configurations.ruby[i] = config
---       end
---     end
---   end
---   if dap.configurations.rdbg ~= nil then
---     for _, config in ipairs(dap.configurations.rdbg) do
---       table.insert(dap.configurations.ruby, config)
---     end
---   end
---
---   -- [[ c++ ]]
---   if dap.configurations.cppdbg ~= nil then
---     for _, config in ipairs(dap.configurations.cppdbg) do
---       if config.request == 'launch' then
---         config.prehook = function()
---           vim.fn.system({ 'g++', '-g', '-O0', vim.fn.expand('%'), '-o', vim.fn.expand('%:r') })
---         end
---       end
---     end
---   end
--- end
-
-
 -- Dap UI setup
 -- For more information, see |:help nvim-dap-ui|
 dapui.setup()
@@ -172,11 +132,16 @@ table.insert(dap.configurations.cpp, {
 
 -- dap adapter
 local dap_adapters = {}
-if vim.fn.executable('go') == 1 then
-  table.insert(dap_adapters, 'delve')
-end
-if vim.fn.executable('g++') == 1 then
-  table.insert(dap_adapters, 'cpptools')
+local langs = {
+  -- executable, dap-adapter
+  { 'go',     'delve' },
+  { 'g++',    'cpptools' },
+  { 'python', 'debugpy' },
+}
+for _, value in ipairs(langs) do
+  if vim.fn.executable(value[1]) == 1 then
+    table.insert(dap_adapters, value[2])
+  end
 end
 
 require("mason-nvim-dap").setup({

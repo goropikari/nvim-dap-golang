@@ -55,13 +55,15 @@ local on_attach = function(client, bufnr)
       callback = function()
         vim.lsp.buf.format()
         vim.lsp.buf.code_action({
-          context = { only = { "source.organizeImports" } }, -- 保存時に自動的に goimports するときに必要
+          context = {
+            diagnostics = {},
+            only = { "source.organizeImports" },
+          }, -- 保存時に自動的に goimports するときに必要
           apply = true,
         })
       end,
     })
   end
-
 
   local wk = require('which-key')
   wk.add(
@@ -79,6 +81,7 @@ local on_attach = function(client, bufnr)
         function()
           vim.lsp.buf.code_action {
             context = {
+              diagnostics = {},
               only = { 'quickfix', 'refactor', 'source' },
             },
           }
@@ -169,57 +172,66 @@ local servers = {
   },
 }
 
-if vim.fn.executable('go') == 1 then
-  servers.gopls = {
-    -- keys = {
-    --   -- Workaround for the lack of a DAP strategy in neotest-go: https://github.com/nvim-neotest/neotest-go/issues/12
-    --   { "<leader>td", "<cmd>lua require('dap-go').debug_test()<CR>", desc = "Debug Nearest (Go)" },
-    -- },
-    settings = {
-      gopls = {
-        gofumpt = true,
-        codelenses = {
-          gc_details = false,
-          generate = true,
-          regenerate_cgo = true,
-          run_govulncheck = true,
-          test = true,
-          tidy = true,
-          upgrade_dependency = true,
-          vendor = true,
+local lsp_langs = {
+  -- executable = {lsp = config}
+  go = {
+    gopls = {
+      -- keys = {
+      --   -- Workaround for the lack of a DAP strategy in neotest-go: https://github.com/nvim-neotest/neotest-go/issues/12
+      --   { "<leader>td", "<cmd>lua require('dap-go').debug_test()<CR>", desc = "Debug Nearest (Go)" },
+      -- },
+      settings = {
+        gopls = {
+          gofumpt = true,
+          codelenses = {
+            gc_details = false,
+            generate = true,
+            regenerate_cgo = true,
+            run_govulncheck = true,
+            test = true,
+            tidy = true,
+            upgrade_dependency = true,
+            vendor = true,
+          },
+          hints = {
+            assignVariableTypes = true,
+            compositeLiteralFields = true,
+            compositeLiteralTypes = true,
+            constantValues = true,
+            functionTypeParameters = true,
+            parameterNames = true,
+            rangeVariableTypes = true,
+          },
+          analyses = {
+            fieldalignment = true,
+            nilness = true,
+            unusedparams = true,
+            unusedwrite = true,
+            useany = true,
+          },
+          usePlaceholders = true,
+          completeUnimported = true,
+          staticcheck = true,
+          directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+          semanticTokens = true,
         },
-        hints = {
-          assignVariableTypes = true,
-          compositeLiteralFields = true,
-          compositeLiteralTypes = true,
-          constantValues = true,
-          functionTypeParameters = true,
-          parameterNames = true,
-          rangeVariableTypes = true,
-        },
-        analyses = {
-          fieldalignment = true,
-          nilness = true,
-          unusedparams = true,
-          unusedwrite = true,
-          useany = true,
-        },
-        usePlaceholders = true,
-        completeUnimported = true,
-        staticcheck = true,
-        directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
-        semanticTokens = true,
       },
-    },
+    }
+  },
+  ruby = {
+    ruby_lsp = {},
+  },
+  clangd = {
+    clangd = {},
   }
-end
+}
 
-if vim.fn.executable('ruby') == 1 then
-  servers.ruby_lsp = {}
-end
-
-if vim.fn.executable('clangd') == 1 then
-  servers.clangd = {}
+for executable, config in pairs(lsp_langs) do
+  if vim.fn.executable(executable) == 1 then
+    for key, val in pairs(config) do
+      servers[key] = val
+    end
+  end
 end
 
 -- Setup neovim lua configuration
