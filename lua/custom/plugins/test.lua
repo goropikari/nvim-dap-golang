@@ -110,6 +110,7 @@ require('dap-go').setup({ -- Additional dap configurations can be added.
   }
 })
 require('dap-ruby').setup()
+require('dap-python').setup()
 require('dap.ext.vscode').load_launchjs(nil, {
   go = { 'go', 'dlv-dap' },
   cpp = { 'c', 'cpp', 'cppdbg' },
