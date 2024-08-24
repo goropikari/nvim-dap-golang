@@ -84,6 +84,7 @@ local on_attach = function(client, bufnr)
               diagnostics = {},
               only = { 'quickfix', 'refactor', 'source' },
             },
+            apply = true,
           }
         end,
         desc = "[C]ode [A]ction",

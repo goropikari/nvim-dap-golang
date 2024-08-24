@@ -10,14 +10,22 @@ vim.diagnostic.config({
 }, neotest_ns)
 
 require('neotest').setup({
-  status = { virtual_text = true },
-  output = { open_on_run = true },
+  status = {
+    enabled = true,
+    signs = true,
+    virtual_text = true,
+  },
+  output = {
+    enabled = true,
+    open_on_run = true,
+  },
   -- your neotest config here
   adapters = {
     require("neotest-go")({
       args = { "--shuffle=on" },
     }),
   },
+  log_level = 3,
 })
 
 -- [[ Configuration DAP ]]
