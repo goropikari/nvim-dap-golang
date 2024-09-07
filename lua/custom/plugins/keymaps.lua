@@ -146,6 +146,11 @@ wk.add(
       dapgo.debug_test,
       desc = "Debug Go Test",
     },
+    {
+      "<leader>duc",
+      require('dapui').close,
+      desc = "Close DAP UI",
+    },
   }
 )
 
