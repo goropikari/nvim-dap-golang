@@ -40,11 +40,6 @@ local on_attach = function(client, bufnr)
   --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   -- end, 'Workspace List Folders')
 
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
-
   -- BufWritePre: 保存時に自動的に実行される処理
   -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-imports
   local gopls_format = function()
@@ -67,16 +62,23 @@ local on_attach = function(client, bufnr)
     vim.lsp.buf.format { async = false }
   end
 
+  local lsp_format = function()
+    if vim.bo.filetype == 'go' then
+      gopls_format()
+    else
+      vim.lsp.buf.format { async = false }
+    end
+  end
+
   vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
     group = vim.api.nvim_create_augroup('lsp_formatting', { clear = true }),
-    callback = function()
-      if vim.bo.filetype == 'go' then
-        gopls_format()
-      else
-        vim.lsp.buf.format { async = false }
-      end
-    end,
+    callback = lsp_format,
   })
+
+  -- Create a command `:Format` local to the LSP buffer
+  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+    lsp_format()
+  end, { desc = 'Format current buffer with LSP' })
 
   local wk = require 'which-key'
   wk.add {
@@ -179,6 +181,13 @@ local servers = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
+      format = {
+        enable = true,
+        defaultConfig = {
+          indent_style = 'space',
+          indent_size = '2',
+        },
+      },
       -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
       -- diagnostics = { disable = { 'missing-fields' } },
     },
