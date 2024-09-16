@@ -52,8 +52,6 @@ wk.add {
 }
 -- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 -- vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
--- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
--- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Comment:  Ctrl-/
 -- terminal によって Ctrl-/ を Ctrl-_ に認識することがある。逆もしかり
@@ -313,15 +311,9 @@ wk.add {
     mode = { 'n', 'v' },
     { '<leader>s', group = 'surround' },
     { '<leader>s_', hidden = true },
-    { 's', group = 'surround' },
-    { 's_', hidden = true },
   },
 }
 wk.add {
-  { 'sa', '<Plug>(nvim-surround-normal)iw', desc = 'add: [char]' },
-  { 'sd', '<Plug>(nvim-surround-delete)', desc = 'delete: [char]' },
-  { 'sr', '<Plug>(nvim-surround-change)', desc = 'replace: [from][to]' },
-  { 'sa', '<Plug>(nvim-surround-visual)', desc = 'add: [char]', mode = 'v' },
   { '<leader>sa', '<Plug>(nvim-surround-normal)iw', desc = 'add: [char]' },
   { '<leader>sd', '<Plug>(nvim-surround-delete)', desc = 'delete: [char]' },
   { '<leader>sr', '<Plug>(nvim-surround-change)', desc = 'replace: [from][to]' },
