@@ -3,7 +3,24 @@
 -- NOTE: You can change these options as you wish!
 
 -- tab の表示幅
+vim.o.expandtab = true
 vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "go" },
+  callback = function()
+    vim.opt.expandtab = false
+  end
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "lua" },
+  callback = function()
+    vim.o.expandtab = true
+    vim.o.tabstop = 2
+    vim.o.shiftwidth = 2
+  end
+})
 
 -- Set highlight on search
 vim.o.hlsearch = true

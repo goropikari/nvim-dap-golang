@@ -13,3 +13,7 @@ install:
 clean:
 	rm -rf ~/.local/share/nvim
 	rm -rf ~/.local/state/nvim
+
+.PHONY: fmt
+fmt:
+	stylua -g '*.lua' -- .

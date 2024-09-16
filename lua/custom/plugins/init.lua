@@ -23,4 +23,7 @@ return {
 
   -- [[ Configure Test ]]
   require 'custom.plugins.test',
+
+  -- [[ Configure autocmds ]]
+  require 'custom.plugins.autocmds',
 }

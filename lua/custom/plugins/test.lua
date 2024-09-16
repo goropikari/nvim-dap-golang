@@ -83,7 +83,6 @@ require('dap.ext.vscode').load_launchjs(nil, {
   go = { 'go', 'dlv-dap' },
   cpp = { 'c', 'cpp', 'cppdbg' },
 }) -- .vscode/launch.json を読み込む
--- vscode_config_to_nvim_config()            -- すべての config が読み込まれたあとに実行する
 
 dap.adapters[go_dap_adapter_name] = function(callback, config)
   callback({ type = 'server', host = config.host, port = config.port })
