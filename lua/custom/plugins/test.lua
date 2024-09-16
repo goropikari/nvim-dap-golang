@@ -30,11 +30,9 @@ require('neotest').setup {
 -- [[ Configuration DAP ]]
 local dap = require 'dap'
 local dapui = require 'dapui'
+local get_arguments = require('dap-go').get_arguments
 require('nvim-dap-virtual-text').setup {}
 require('telescope').load_extension 'dap'
-
-local go_dap_adapter_name = 'delve'
-local ruby_dap_adapter_name = 'rdbg'
 
 -- Dap UI setup
 -- For more information, see |:help nvim-dap-ui|
@@ -46,7 +44,27 @@ dap.listeners.after.event_initialized['dapui_config'] = dapui.open
 -- dap.listeners.before.event_terminated['dapui_config'] = dapui.close
 dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
--- Install golang specific config
+-- dap adapter
+local dap_adapters = {}
+local langs = {
+  -- { executable, dap-adapter }
+  { 'go', 'delve' },
+  { 'g++', 'cpptools' },
+  { 'python', 'debugpy' },
+}
+for _, value in ipairs(langs) do
+  if vim.fn.executable(value[1]) == 1 then
+    table.insert(dap_adapters, value[2])
+  end
+end
+
+-- install dap adapter
+require('mason-nvim-dap').setup {
+  automatic_installation = true,
+  ensure_installed = dap_adapters,
+}
+
+-- [[ golang ]]
 require('dap-go').setup { -- Additional dap configurations can be added.
   -- dap_configurations accepts a list of tables where each entry
   -- represents a dap configuration. For more details do:
@@ -75,14 +93,7 @@ require('dap-go').setup { -- Additional dap configurations can be added.
     build_flags = '',
   },
 }
-require('dap-ruby').setup()
-require('dap-python').setup()
-require('dap.ext.vscode').load_launchjs(nil, {
-  go = { 'go', 'dlv-dap' },
-  cpp = { 'c', 'cpp', 'cppdbg' },
-}) -- .vscode/launch.json を読み込む
-
-dap.adapters[go_dap_adapter_name] = function(callback, config)
+dap.adapters.delve = function(callback, config)
   callback { type = 'server', host = config.host, port = config.port }
 end
 -- dap.adapters.delve = { -- ベタ書きする方法もある
@@ -91,7 +102,9 @@ end
 --   port = 8081
 -- }
 
-dap.adapters[ruby_dap_adapter_name] = function(callback, config)
+-- [[ ruby ]]
+require('dap-ruby').setup()
+dap.adapters.rdbg = function(callback, config)
   if config.port ~= nil then
     callback { type = 'server', host = config.host, port = config.port }
   elseif config.debugPort ~= nil then
@@ -104,30 +117,43 @@ dap.adapters[ruby_dap_adapter_name] = function(callback, config)
   end
 end
 
--- [[  cpp debug ]]
+-- [[  c++ ]]
 local cpptools_path = vim.fn.stdpath 'data' .. '/mason/packages/cpptools'
-dap.adapters.cppdbg = {
+dap.adapters.cppdbg = { -- for vscode cpp debug
   id = 'cppdbg',
   type = 'executable',
   command = cpptools_path .. '/extension/debugAdapters/bin/OpenDebugAD7',
+  enrich_config = function(config, on_config)
+    local final_config = vim.deepcopy(config)
+    -- 実行前にコンパイルする
+    vim.fn.system { 'g++', '-g', '-O0', vim.fn.expand '%', '-o', vim.fn.expand '%:r' }
+    on_config(final_config)
+  end,
 }
-dap.configurations.cpp = dap.configurations.cppdbg
 
-dap.adapters.gdbdap = {
-  type = 'executable',
-  command = 'gdb',
-  args = { '-i', 'dap' }, -- required gdb v14.x
-}
 if dap.configurations.cpp == nil then
   dap.configurations.cpp = {}
 end
 table.insert(dap.configurations.cpp, {
-  -- 実行前にコンパイルする
-  prehook = function()
-    vim.fn.system { 'g++', '-g', '-O0', vim.fn.expand '%', '-o', vim.fn.expand '%:r' }
-  end,
-  name = 'gdb dap',
-  type = 'gdbdap',
+  name = 'gdb dap build and debug (neovim)',
+  type = 'cppdbg',
+  request = 'launch',
+  program = '${workspaceFolder}/${fileBasenameNoExtension}',
+  cwd = '${workspaceFolder}',
+  stopAtBeginningOfMainSubprogram = false,
+})
+table.insert(dap.configurations.cpp, {
+  name = 'gdb dap build and debug with args (neovim)',
+  type = 'cppdbg',
+  request = 'launch',
+  program = '${workspaceFolder}/${fileBasenameNoExtension}',
+  cwd = '${workspaceFolder}',
+  stopAtBeginningOfMainSubprogram = false,
+  args = get_arguments,
+})
+table.insert(dap.configurations.cpp, {
+  name = 'gdb dap build and debug for competitive programming (neovim)',
+  type = 'cppdbg',
   request = 'launch',
   program = '${workspaceFolder}/${fileBasenameNoExtension}',
   cwd = '${workspaceFolder}',
@@ -135,21 +161,5 @@ table.insert(dap.configurations.cpp, {
   args = { '<', 'test.txt' },
 })
 
--- dap adapter
-local dap_adapters = {}
-local langs = {
-  -- executable, dap-adapter
-  { 'go', 'delve' },
-  { 'g++', 'cpptools' },
-  { 'python', 'debugpy' },
-}
-for _, value in ipairs(langs) do
-  if vim.fn.executable(value[1]) == 1 then
-    table.insert(dap_adapters, value[2])
-  end
-end
-
-require('mason-nvim-dap').setup {
-  automatic_installation = true,
-  ensure_installed = dap_adapters,
-}
+-- [[ python ]]
+require('dap-python').setup()
