@@ -1,5 +1,5 @@
 -- [[ colorscheme ]]
-require('gruvbox').setup({
+require('gruvbox').setup {
   italic = {
     strings = false,
     emphasis = false,
@@ -11,13 +11,13 @@ require('gruvbox').setup({
   underline = true,
   bold = false,
   overrides = {
-    LineNr = { fg = "#C0D4C0" },  -- line number の色を変える
-    Comment = { fg = "#50B010" }, -- comment の色を変える
+    LineNr = { fg = '#C0D4C0' }, -- line number の色を変える
+    Comment = { fg = '#50B010' }, -- comment の色を変える
   },
-})
-vim.cmd("colorscheme gruvbox")
+}
+vim.cmd 'colorscheme gruvbox'
 
-require('vscode').setup({
+require('vscode').setup {
   -- Alternatively set style in setup
   -- style = 'light'
 
@@ -44,44 +44,44 @@ require('vscode').setup({
     -- use colors from this colorscheme by requiring vscode.colors!
     -- LineNr = { fg = "#C0D4C0" },  -- line number の色を変える
     -- Comment = { fg = "#C0D4C0" }, -- line number の色を変える
-  }
-})
+  },
+}
 -- vim.cmd('colorscheme vscode')
 
 -- [[noice.vim]]
-require("noice").setup({
+require('noice').setup {
   lsp = {
     -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
     override = {
-      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-      ["vim.lsp.util.stylize_markdown"] = true,
-      ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+      ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+      ['vim.lsp.util.stylize_markdown'] = true,
+      ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
     },
   },
   -- you can enable a preset for easier configuration
   presets = {
-    bottom_search = true,         -- use a classic bottom cmdline for search
-    command_palette = true,       -- position the cmdline and popupmenu together
+    bottom_search = true, -- use a classic bottom cmdline for search
+    command_palette = true, -- position the cmdline and popupmenu together
     long_message_to_split = true, -- long messages will be sent to a split
-    inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-    lsp_doc_border = false,       -- add a border to hover docs and signature help
+    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+    lsp_doc_border = false, -- add a border to hover docs and signature help
   },
-})
+}
 
 -- require('notify').setup({
 --   background_colour = '#000000',
 -- })
 
-require('lualine').setup({
+require('lualine').setup {
   options = {
     icons_enabled = false,
     theme = 'auto',
     component_separators = '|',
     section_separators = '',
   },
-})
+}
 
-require('gitsigns').setup({
+require('gitsigns').setup {
   -- See `:help gitsigns.txt`
   signs = {
     add = { text = '+' },
@@ -150,7 +150,7 @@ require('gitsigns').setup({
   --   -- Text object
   --   -- map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
   -- end,
-})
+}
 
 -- require('neo-tree').setup({
 --   sources = { "filesystem", "buffers", "git_status", "document_symbols" },
@@ -184,16 +184,16 @@ require('gitsigns').setup({
 --   },
 -- })
 
-require('chowcho').setup({
+require('chowcho').setup {
   -- Must be a single character. The length of the array is the maximum number of windows that can be moved.
-  labels = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" },
+  labels = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' },
   use_exclude_default = true,
   ignore_case = true,
   exclude = function(buf, win)
     -- exclude noice.nvim's cmdline_popup
-    local bt = vim.api.nvim_get_option_value("buftype", { buf = buf })
-    local ft = vim.api.nvim_get_option_value("filetype", { buf = buf })
-    if bt == "nofile" and (ft == "noice" or ft == "vim") then
+    local bt = vim.api.nvim_get_option_value('buftype', { buf = buf })
+    local ft = vim.api.nvim_get_option_value('filetype', { buf = buf })
+    if bt == 'nofile' and (ft == 'noice' or ft == 'vim') then
       return true
     end
     return false
@@ -201,35 +201,35 @@ require('chowcho').setup({
   selector_style = 'float',
   selector = {
     float = {
-      border_style = "rounded",
+      border_style = 'rounded',
       icon_enabled = true,
       color = {
-        label = { active = "#c8cfff", inactive = "#ababab" },
-        text = { active = "#fefefe", inactive = "#d0d0d0" },
-        border = { active = "#b400c8", inactive = "#fefefe" },
+        label = { active = '#c8cfff', inactive = '#ababab' },
+        text = { active = '#fefefe', inactive = '#d0d0d0' },
+        border = { active = '#b400c8', inactive = '#fefefe' },
       },
       zindex = 1,
     },
     statusline = {
       color = {
-        label = { active = "#fefefe", inactive = "#d0d0d0" },
-        background = { active = "#3d7172", inactive = "#203a3a" },
+        label = { active = '#fefefe', inactive = '#d0d0d0' },
+        background = { active = '#3d7172', inactive = '#203a3a' },
       },
     },
   },
-})
+}
 
 -- require('flash').setup()
-require('lualine').setup({
+require('lualine').setup {
   sections = {
     lualine_c = {
       {
         'filename',
         path = 3,
-      }
+      },
     },
   },
-})
+}
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`

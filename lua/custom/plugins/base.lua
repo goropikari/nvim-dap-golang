@@ -7,19 +7,19 @@ vim.o.expandtab = true
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "go" },
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'go' },
   callback = function()
     vim.opt.expandtab = false
-  end
+  end,
 })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "lua" },
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'lua' },
   callback = function()
     vim.o.expandtab = true
     vim.o.tabstop = 2
     vim.o.shiftwidth = 2
-  end
+  end,
 })
 
 -- Set highlight on search
@@ -65,34 +65,34 @@ vim.o.foldlevel = 99 -- 起動時にコードの折りたたみを無効にし�
 vim.opt.swapfile = false
 
 -- VSCode の設定ファイルは jsonc として認識する
-vim.filetype.add({
+vim.filetype.add {
   filename = {
     ['devcontainer.json'] = 'jsonc',
-    ['launch.json']       = 'jsonc',
-    ['settings.json']     = 'jsonc',
-  }
-})
+    ['launch.json'] = 'jsonc',
+    ['settings.json'] = 'jsonc',
+  },
+}
 
 -- only set clipboard if not in ssh, to make sure the OSC 52
 -- integration works automatically. Requires Neovim >= 0.10.0
 -- https://github.com/LazyVim/LazyVim/blob/12818a6cb499456f4903c5d8e68af43753ebc869/lua/lazyvim/config/options.lua#L56-L58
 -- https://github.com/neovim/neovim/discussions/28010#discussioncomment-9877494
-vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus' -- Sync with system clipboard
 local function paste()
   return {
-    vim.fn.split(vim.fn.getreg(""), "\n"),
-    vim.fn.getregtype(""),
+    vim.fn.split(vim.fn.getreg '', '\n'),
+    vim.fn.getregtype '',
   }
 end
 
 vim.g.clipboard = {
-  name = "OSC 52",
+  name = 'OSC 52',
   copy = {
-    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+    ['*'] = require('vim.ui.clipboard.osc52').copy '*',
   },
   paste = {
-    ["+"] = paste,
-    ["*"] = paste,
+    ['+'] = paste,
+    ['*'] = paste,
   },
 }

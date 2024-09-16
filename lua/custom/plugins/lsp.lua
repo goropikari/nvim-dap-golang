@@ -49,115 +49,114 @@ local on_attach = function(client, bufnr)
   -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-imports
   local gopls_format = function()
     local params = vim.lsp.util.make_range_params()
-    params.context = { only = { "source.organizeImports" } }
+    params.context = { only = { 'source.organizeImports' } }
     -- buf_request_sync defaults to a 1000ms timeout. Depending on your
     -- machine and codebase, you may want longer. Add an additional
     -- argument after params if you find that you have to write the file
     -- twice for changes to be saved.
     -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+    local result = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
     for cid, res in pairs(result or {}) do
       for _, r in pairs(res.result or {}) do
         if r.edit then
-          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or 'utf-16'
           vim.lsp.util.apply_workspace_edit(r.edit, enc)
         end
       end
     end
-    vim.lsp.buf.format({ async = false })
+    vim.lsp.buf.format { async = false }
   end
 
-  vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    group = vim.api.nvim_create_augroup("lsp_formatting", { clear = true }),
+  vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+    group = vim.api.nvim_create_augroup('lsp_formatting', { clear = true }),
     callback = function()
-      if vim.bo.filetype == "go" then
+      if vim.bo.filetype == 'go' then
         gopls_format()
       else
-        vim.lsp.buf.format({ async = false })
+        vim.lsp.buf.format { async = false }
       end
-    end
+    end,
   })
 
-  local wk = require('which-key')
-  wk.add(
+  local wk = require 'which-key'
+  wk.add {
+    { '<leader>l', group = '[L]SP' },
+    { '<leader>l_', hidden = true },
     {
-      { "<leader>l",  group = "[L]SP" },
-      { "<leader>l_", hidden = true },
-      {
-        "<leader>lK",
-        vim.lsp.buf.hover,
-        desc = "Hover Documentation",
-      },
-      { "<leader>lc", group = "[C]ode" },
-      {
-        "<leader>lca",
-        function()
-          vim.lsp.buf.code_action {
-            context = {
-              diagnostics = {},
-              only = { 'quickfix', 'refactor', 'source' },
-            },
-            apply = true,
-          }
-        end,
-        desc = "[C]ode [A]ction",
-      },
-      {
-        "<leader>ldS",
-        vim.lsp.buf.signature_help,
-        desc = "Signature Documentation",
-      },
-      {
-        "<leader>ldh",
-        vim.lsp.buf.hover,
-        desc = "Hover Documentation",
-      },
-      {
-        "<leader>lds",
-        require('telescope.builtin').lsp_document_symbols,
-        desc = "Document Symbols",
-      },
-      {
-        "<leader>lf",
-        function(_) vim.lsp.buf.format() end,
-        desc = "Format",
-      },
-      { "<leader>lg", group = "Goto" },
-      {
-        "<leader>lgD",
-        vim.lsp.buf.declaration,
-        desc = "Goto Declaration",
-      },
-      {
-        "<leader>lgI",
-        require('telescope.builtin').lsp_implementations,
-        desc = "Goto Implementation",
-      },
-      {
-        "<leader>lgd",
-        require('telescope.builtin').lsp_definitions,
-        desc = "Goto Definition",
-      },
-      {
-        "<leader>lgr",
-        require('telescope.builtin').lsp_references,
-        desc = "Goto References",
-      },
-      {
-        "<leader>lk",
-        vim.lsp.buf.signature_help,
-        desc = "Signature Documentation",
-      },
-      { "<leader>lr",  group = "Rename" },
-      { "<leader>lr_", hidden = true },
-      {
-        "<leader>lrn",
-        vim.lsp.buf.rename,
-        desc = "Rename",
-      },
-
-    }
-  )
+      '<leader>lK',
+      vim.lsp.buf.hover,
+      desc = 'Hover Documentation',
+    },
+    { '<leader>lc', group = '[C]ode' },
+    {
+      '<leader>lca',
+      function()
+        vim.lsp.buf.code_action {
+          context = {
+            diagnostics = {},
+            only = { 'quickfix', 'refactor', 'source' },
+          },
+          apply = true,
+        }
+      end,
+      desc = '[C]ode [A]ction',
+    },
+    {
+      '<leader>ldS',
+      vim.lsp.buf.signature_help,
+      desc = 'Signature Documentation',
+    },
+    {
+      '<leader>ldh',
+      vim.lsp.buf.hover,
+      desc = 'Hover Documentation',
+    },
+    {
+      '<leader>lds',
+      require('telescope.builtin').lsp_document_symbols,
+      desc = 'Document Symbols',
+    },
+    {
+      '<leader>lf',
+      function(_)
+        vim.lsp.buf.format()
+      end,
+      desc = 'Format',
+    },
+    { '<leader>lg', group = 'Goto' },
+    {
+      '<leader>lgD',
+      vim.lsp.buf.declaration,
+      desc = 'Goto Declaration',
+    },
+    {
+      '<leader>lgI',
+      require('telescope.builtin').lsp_implementations,
+      desc = 'Goto Implementation',
+    },
+    {
+      '<leader>lgd',
+      require('telescope.builtin').lsp_definitions,
+      desc = 'Goto Definition',
+    },
+    {
+      '<leader>lgr',
+      require('telescope.builtin').lsp_references,
+      desc = 'Goto References',
+    },
+    {
+      '<leader>lk',
+      vim.lsp.buf.signature_help,
+      desc = 'Signature Documentation',
+    },
+    { '<leader>lr', group = 'Rename' },
+    { '<leader>lr_', hidden = true },
+    {
+      '<leader>lrn',
+      vim.lsp.buf.rename,
+      desc = 'Rename',
+    },
+  }
 end -- on_attach
 
 -- mason-lspconfig requires that these setup functions are called in this order
@@ -226,18 +225,18 @@ local lsp_langs = {
           usePlaceholders = true,
           completeUnimported = true,
           staticcheck = true,
-          directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+          directoryFilters = { '-.git', '-.vscode', '-.idea', '-.vscode-test', '-node_modules' },
           semanticTokens = true,
         },
       },
-    }
+    },
   },
   ruby = {
     ruby_lsp = {},
   },
   clangd = {
     clangd = {},
-  }
+  },
 }
 
 for executable, config in pairs(lsp_langs) do

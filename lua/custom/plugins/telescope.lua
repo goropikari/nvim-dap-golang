@@ -11,7 +11,7 @@
 --   },
 -- }
 
-local wk = require('which-key')
+local wk = require 'which-key'
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
@@ -64,17 +64,15 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer' })
 -- vim.keymap.set('n', '<c-p>', require('telescope.builtin').find_files) -- Ctrl-p でファイル検索
 -- vim.keymap.set('n', '<leader>p', require('telescope.builtin').find_files) -- <leader>-p でファイル検索
-wk.add(
+wk.add {
   {
-    {
-      "<leader>p",
-      function()
-        require('telescope.builtin').find_files({ hidden = true, file_ignore_patterns = { ".git/" } })
-      end,
-      desc = "search file"
-    },
-  }
-)
+    '<leader>p',
+    function()
+      require('telescope.builtin').find_files { hidden = true, file_ignore_patterns = { '.git/' } }
+    end,
+    desc = 'search file',
+  },
+}
 
 local function telescope_live_grep_open_files()
   require('telescope.builtin').live_grep {
@@ -83,8 +81,7 @@ local function telescope_live_grep_open_files()
   }
 end
 vim.keymap.set('n', '<leader>s/', telescope_live_grep_open_files, { desc = 'Search [/] in Open Files' })
-vim.keymap.set('n', '<leader>sb', require('telescope.builtin').current_buffer_fuzzy_find,
-  { desc = 'Search current Buffer' })
+vim.keymap.set('n', '<leader>sb', require('telescope.builtin').current_buffer_fuzzy_find, { desc = 'Search current Buffer' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = 'Search Select Telescope' })
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search Git Files' })
 vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { desc = 'Search Git Status' })
