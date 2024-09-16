@@ -182,11 +182,11 @@ local servers = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
       format = {
-        enable = true,
-        defaultConfig = {
-          indent_style = 'space',
-          indent_size = '2',
-        },
+        enable = false,
+        -- defaultConfig = {
+        --   indent_style = 'space',
+        --   indent_size = '2',
+        -- },
       },
       -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
       -- diagnostics = { disable = { 'missing-fields' } },
