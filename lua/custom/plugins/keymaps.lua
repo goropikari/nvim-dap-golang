@@ -125,45 +125,55 @@ wk.add {
 
 -- [[ nvim-dap ]]
 -- Basic debugging keymaps, feel free to change to your liking!
-local dap = require 'dap'
-local dapgo = require 'dap-go'
 wk.add {
   { '<leader>d', group = 'Debug' },
   {
     '<leader>dC',
-    dap.clear_breakpoints,
+    function()
+      require('dap').clear_breakpoints()
+    end,
     desc = 'Debug: Clear Breakpoint',
   },
   {
     '<leader>db',
-    dap.toggle_breakpoint,
+    function()
+      require('dap').toggle_breakpoint()
+    end,
     desc = 'Debug: Toggle Breakpoint',
   },
   {
     '<leader>dc',
     function()
-      dap.toggle_breakpoint(vim.fn.input 'debug condition: ')
+      require('dap').toggle_breakpoint(vim.fn.input 'debug condition: ')
     end,
     desc = 'Debug: Toggle Conditional Breakpoint',
   },
   {
     '<leader>dt',
-    dapgo.debug_test,
+    function()
+      require('dap-go').debug_test()
+    end,
     desc = 'Debug Go Test',
   },
   {
     '<leader>duc',
-    require('dapui').close,
+    function()
+      require('dapui').close()
+    end,
     desc = 'Close DAP UI',
   },
   {
     '<F5>',
-    dap.continue,
+    function()
+      require('dap').continue()
+    end,
     desc = 'Debug: Continue',
   },
   {
     '<F10>',
-    dap.step_over,
+    function()
+      require('dap').step_over()
+    end,
     desc = 'Debug: Step over',
   },
 }
