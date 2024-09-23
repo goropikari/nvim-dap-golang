@@ -202,7 +202,14 @@ wk.add {
   },
 }
 wk.add {
-  { '<leader>y', require('osc52').copy_visual, desc = 'osc52: copy clipboard', mode = 'v' },
+  {
+    '<leader>y',
+    function()
+      require('osc52').copy_visual()
+    end,
+    desc = 'osc52: copy clipboard',
+    mode = 'v',
+  },
 }
 
 -- [[ Noice ]]
