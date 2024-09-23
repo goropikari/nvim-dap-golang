@@ -63,7 +63,13 @@ vim.keymap.set('x', '<c-/>', '<ESC><CMD>lua require("Comment.api").locked("toggl
 -- 開いている window を番号で選択する
 wk.add {
   { '<leader>C', group = 'Choose' },
-  { '<leader>CC', require('chowcho').run, desc = 'choose window' },
+  {
+    '<leader>CC',
+    function()
+      require('chowcho').run()
+    end,
+    desc = 'choose window',
+  },
 }
 
 -- terminal mode を escape で抜ける
