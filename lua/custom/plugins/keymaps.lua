@@ -1,47 +1,47 @@
 -- [[ Basic Keymaps ]]
 
-local wk = require 'which-key'
+local wk = require('which-key')
 
 -- document existing key chains
-wk.add {
+wk.add({
   { '<leader>c', group = 'Code' },
   { '<leader>c_', hidden = true },
   { '<leader>h', group = 'Git Hunk' },
   { '<leader>h_', hidden = true },
   { '<leader>s', group = 'Search' },
   { '<leader>s_', hidden = true },
-}
+})
 
 -- required for visual <leader>hs (hunk stage) to work
-wk.add {
+wk.add({
   { '<leader>', group = 'VISUAL <leader>', mode = 'v' },
   { '<leader>h', desc = 'Git Hunk', mode = 'v' },
-}
+})
 
-wk.add {
+wk.add({
   {
     '<leader>cd',
     function()
-      vim.cmd(':tcd ' .. vim.fn.expand '%:p:h')
+      vim.cmd(':tcd ' .. vim.fn.expand('%:p:h'))
     end,
     desc = 'change directory of current file',
   },
   {
     '<leader>ce',
     function()
-      vim.cmd ':tabnew ~/.config/nvim/init.lua'
-      vim.cmd ':tcd ~/.config/nvim'
+      vim.cmd(':tabnew ~/.config/nvim/init.lua')
+      vim.cmd(':tcd ~/.config/nvim')
       -- vim.cmd('Neotree show')
     end,
     desc = 'edit neovim config',
   },
-}
+})
 
 -- Diagnostic keymaps
-wk.add {
+wk.add({
   { '<leader>e', vim.diagnostic.open_float, desc = 'Open floating diagnostic message' },
   { '<leader>q', vim.diagnostic.setloclist, desc = 'Open diagnostics list' },
-}
+})
 -- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 -- vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 
@@ -57,7 +57,7 @@ vim.keymap.set('x', '<c-_>', '<ESC><CMD>lua require("Comment.api").locked("toggl
 vim.keymap.set('x', '<c-/>', '<ESC><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>', { desc = 'Comment toggle linewise' })
 
 -- 開いている window を番号で選択する
-wk.add {
+wk.add({
   { '<leader>C', group = 'Choose' },
   {
     '<leader>CC',
@@ -66,25 +66,25 @@ wk.add {
     end,
     desc = 'choose window',
   },
-}
+})
 
 -- terminal mode を escape で抜ける
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])
 vim.keymap.set('n', '<c-t>', function()
-  vim.cmd 'ToggleTerm'
+  vim.cmd('ToggleTerm')
 end)
 vim.keymap.set('t', '<c-t>', function()
-  vim.cmd 'ToggleTerm'
+  vim.cmd('ToggleTerm')
 end)
 
 -- [[ neotest ]]
 -- local nt = require 'neotest'
-wk.add {
+wk.add({
   { '<leader>t', group = 'Test' },
   {
     '<leader>ta',
     function()
-      require('neotest').run.run(vim.fn.expand '%')
+      require('neotest').run.run(vim.fn.expand('%'))
       require('neotest').summary.open()
     end,
     desc = 'Test All',
@@ -92,7 +92,7 @@ wk.add {
   {
     '<leader>td',
     function()
-      require('neotest').run.run { strategy = 'dap' }
+      require('neotest').run.run({ strategy = 'dap' })
     end,
     desc = 'Test Debug',
   },
@@ -108,16 +108,16 @@ wk.add {
     function()
       local exrc = vim.g.exrc
       local env = (exrc and exrc.neotest and exrc.neotest.env) or {}
-      require('neotest').run.run { env = env }
+      require('neotest').run.run({ env = env })
       require('neotest').summary.open()
     end,
     desc = 'Test Single',
   },
-}
+})
 
 -- [[ nvim-dap ]]
 -- Basic debugging keymaps, feel free to change to your liking!
-wk.add {
+wk.add({
   { '<leader>d', group = 'Debug' },
   {
     '<leader>dC',
@@ -136,7 +136,7 @@ wk.add {
   {
     '<leader>dc',
     function()
-      require('dap').toggle_breakpoint(vim.fn.input 'debug condition: ')
+      require('dap').toggle_breakpoint(vim.fn.input('debug condition: '))
     end,
     desc = 'Debug: Toggle Conditional Breakpoint',
   },
@@ -168,11 +168,11 @@ wk.add {
     end,
     desc = 'Debug: Step over',
   },
-}
+})
 
 -- [[ osc52 ]]
 -- ssh, docker 内で copy したものをホストの clipboard に入れる
-wk.add {
+wk.add({
   {
     '<leader>y',
     expr = true,
@@ -182,21 +182,21 @@ wk.add {
   {
     '<leader>ya',
     function()
-      require('osc52').copy(vim.fn.expand '%:p')
+      require('osc52').copy(vim.fn.expand('%:p'))
     end,
     desc = 'osc52: copy file absolute path',
   },
   {
     '<leader>yf',
     function()
-      require('osc52').copy(vim.fn.expand '%:t')
+      require('osc52').copy(vim.fn.expand('%:t'))
     end,
     desc = 'osc52: copy current file name',
   },
   {
     '<leader>yr',
     function()
-      require('osc52').copy(vim.fn.expand '%')
+      require('osc52').copy(vim.fn.expand('%'))
     end,
     desc = 'osc52: copy file relative path',
   },
@@ -206,8 +206,8 @@ wk.add {
     desc = 'osc52: copy line',
     remap = true,
   },
-}
-wk.add {
+})
+wk.add({
   {
     '<leader>y',
     function()
@@ -216,36 +216,36 @@ wk.add {
     desc = 'osc52: copy clipboard',
     mode = 'v',
   },
-}
+})
 
 -- [[ Noice ]]
-wk.add {
+wk.add({
   { '<leader>n', desc = 'Noice' },
   {
     '<leader>ne',
     function()
-      require('noice').cmd 'error'
+      require('noice').cmd('error')
     end,
     desc = 'Noice Error',
   },
   {
     '<leader>nl',
     function()
-      require('noice').cmd 'last'
+      require('noice').cmd('last')
     end,
     desc = 'Noice [L]ast',
   },
-}
+})
 
 -- [[ gitsigns ]]
-require 'gitsigns'
+require('gitsigns')
 local gs = package.loaded.gitsigns
-wk.add {
+wk.add({
   { '<leader>h', desc = 'Git Hank' },
   {
     '<leader>hD',
     function()
-      gs.diffthis '~'
+      gs.diffthis('~')
     end,
     desc = 'git diff against last commit',
   },
@@ -262,7 +262,7 @@ wk.add {
   {
     '<leader>hb',
     function()
-      gs.blame_line { full = false }
+      gs.blame_line({ full = false })
     end,
     desc = 'git blame line',
   },
@@ -294,14 +294,14 @@ wk.add {
   {
     '<leader>hs',
     function()
-      gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
+      gs.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
     end,
     desc = 'stage git hunk',
     mode = 'v',
   },
-}
+})
 
-wk.add {
+wk.add({
   {
     '[c',
     function()
@@ -332,34 +332,34 @@ wk.add {
     expr = true,
     replace_keycodes = false,
   },
-}
+})
 
 -- [[ kylechui/nvim-surround ]]
-wk.add {
+wk.add({
   {
     mode = { 'n', 'v' },
     { '<leader>s', group = 'surround' },
     { '<leader>s_', hidden = true },
   },
-}
-wk.add {
+})
+wk.add({
   { '<leader>sa', '<Plug>(nvim-surround-normal)iw', desc = 'add: [char]' },
   { '<leader>sd', '<Plug>(nvim-surround-delete)', desc = 'delete: [char]' },
   { '<leader>sr', '<Plug>(nvim-surround-change)', desc = 'replace: [from][to]' },
   { '<leader>sa', '<Plug>(nvim-surround-visual)', desc = 'add: [char]', mode = 'v' },
-}
+})
 
 -- [[ vim-easy-align ]]
-wk.add {
+wk.add({
   { '<leader>A', '<Plug>(EasyAlign)*', desc = 'align', mode = 'v' },
-}
+})
 
 -- [[ barbar.nvim ]]
-wk.add {
+wk.add({
   { '<leader>b', group = 'Buffer' },
   { '<leader>bN', '<Cmd>BufferPrevious<CR>', desc = 'Buffer Previous' },
   { '<leader>bc', group = 'Buffer Clear' },
   { '<leader>bca', '<Cmd>BufferCloseAllButCurrent<CR><C-w><C-o><CR>', desc = 'close all buffer but current' },
   { '<leader>bcc', '<Cmd>BufferClose<CR><Cmd>q<CR>', desc = 'close buffer' },
   { '<leader>bn', '<Cmd>BufferNext<CR>', desc = 'Buffer Next' },
-}
+})

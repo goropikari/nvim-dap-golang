@@ -59,7 +59,7 @@ local on_attach = function(client, bufnr)
         end
       end
     end
-    vim.lsp.buf.format { async = false }
+    vim.lsp.buf.format({ async = false })
   end
 
   local lsp_format = function()
@@ -68,7 +68,7 @@ local on_attach = function(client, bufnr)
     elseif vim.bo.filetype == 'lua' then
       require('stylua-nvim').format_file()
     else
-      vim.lsp.buf.format { async = false }
+      vim.lsp.buf.format({ async = false })
     end
   end
 
@@ -82,8 +82,8 @@ local on_attach = function(client, bufnr)
     lsp_format()
   end, { desc = 'Format current buffer with LSP' })
 
-  local wk = require 'which-key'
-  wk.add {
+  local wk = require('which-key')
+  wk.add({
     { '<leader>l', group = '[L]SP' },
     { '<leader>l_', hidden = true },
     {
@@ -95,13 +95,13 @@ local on_attach = function(client, bufnr)
     {
       '<leader>lca',
       function()
-        vim.lsp.buf.code_action {
+        vim.lsp.buf.code_action({
           context = {
             diagnostics = {},
             only = { 'quickfix', 'refactor', 'source' },
           },
           apply = true,
-        }
+        })
       end,
       desc = '[C]ode [A]ction',
     },
@@ -160,7 +160,7 @@ local on_attach = function(client, bufnr)
       vim.lsp.buf.rename,
       desc = 'Rename',
     },
-  }
+  })
 end -- on_attach
 
 -- mason-lspconfig requires that these setup functions are called in this order
@@ -266,19 +266,19 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Ensure the servers above are installed
-local mason_lspconfig = require 'mason-lspconfig'
+local mason_lspconfig = require('mason-lspconfig')
 
-mason_lspconfig.setup {
+mason_lspconfig.setup({
   ensure_installed = vim.tbl_keys(servers),
-}
+})
 
-mason_lspconfig.setup_handlers {
+mason_lspconfig.setup_handlers({
   function(server_name)
-    require('lspconfig')[server_name].setup {
+    require('lspconfig')[server_name].setup({
       capabilities = capabilities,
       on_attach = on_attach,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
-    }
+    })
   end,
-}
+})

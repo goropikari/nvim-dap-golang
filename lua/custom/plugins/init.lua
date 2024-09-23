@@ -4,18 +4,18 @@
 -- See the kickstart.nvim README for more information
 return {
   -- [[ Setting options ]]
-  require 'custom.plugins.base',
-  require 'custom.plugins.editor',
+  require('custom.plugins.base'),
+  require('custom.plugins.editor'),
 
   -- [[ Basic Keymaps ]]
-  require 'custom.plugins.keymaps',
+  require('custom.plugins.keymaps'),
 
   -- [[ Configure Telescope ]]
-  require 'custom.plugins.telescope',
+  require('custom.plugins.telescope'),
 
   -- [[ Configure LSP ]]
-  require 'custom.plugins.lsp',
+  require('custom.plugins.lsp'),
 
   -- [[ Configure autocmds ]]
-  require 'custom.plugins.autocmds',
+  require('custom.plugins.autocmds'),
 }
