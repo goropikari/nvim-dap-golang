@@ -1,16 +1,4 @@
 -- [[ Configure Telescope ]]
--- See `:help telescope` and `:help telescope.setup()`
--- require('telescope').setup {
---   defaults = {
---     mappings = {
---       i = {
---         ['<C-u>'] = false,
---         ['<C-d>'] = false,
---       },
---     },
---   },
--- }
-
 local wk = require 'which-key'
 
 -- Enable telescope fzf native, if installed
