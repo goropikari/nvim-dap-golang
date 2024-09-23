@@ -22,15 +22,6 @@ require('noice').setup {
 --   background_colour = '#000000',
 -- })
 
-require('lualine').setup {
-  options = {
-    icons_enabled = false,
-    theme = 'auto',
-    component_separators = '|',
-    section_separators = '',
-  },
-}
-
 require('gitsigns').setup {
   -- See `:help gitsigns.txt`
   signs = {
@@ -164,18 +155,6 @@ require('chowcho').setup {
       color = {
         label = { active = '#fefefe', inactive = '#d0d0d0' },
         background = { active = '#3d7172', inactive = '#203a3a' },
-      },
-    },
-  },
-}
-
--- require('flash').setup()
-require('lualine').setup {
-  sections = {
-    lualine_c = {
-      {
-        'filename',
-        path = 3,
       },
     },
   },
