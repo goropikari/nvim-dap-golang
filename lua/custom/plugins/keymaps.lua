@@ -78,7 +78,6 @@ vim.keymap.set('t', '<c-t>', function()
 end)
 
 -- [[ neotest ]]
--- local nt = require 'neotest'
 wk.add({
   { '<leader>t', group = 'Test' },
   {
@@ -238,8 +237,7 @@ wk.add({
 })
 
 -- [[ gitsigns ]]
-require('gitsigns')
-local gs = package.loaded.gitsigns
+local gs = require('gitsigns')
 wk.add({
   { '<leader>h', desc = 'Git Hank' },
   {
