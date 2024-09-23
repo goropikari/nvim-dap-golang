@@ -5,7 +5,6 @@
 return {
   -- [[ Setting options ]]
   require('custom.plugins.base'),
-  require('custom.plugins.editor'),
 
   -- [[ Basic Keymaps ]]
   require('custom.plugins.keymaps'),
