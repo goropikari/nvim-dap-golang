@@ -86,28 +86,28 @@ vim.keymap.set('t', '<c-t>', function()
 end)
 
 -- [[ neotest ]]
-local nt = require 'neotest'
+-- local nt = require 'neotest'
 wk.add {
   { '<leader>t', group = 'Test' },
   {
     '<leader>ta',
     function()
-      nt.run.run(vim.fn.expand '%')
-      nt.summary.open()
+      require('neotest').run.run(vim.fn.expand '%')
+      require('neotest').summary.open()
     end,
     desc = 'Test All',
   },
   {
     '<leader>td',
     function()
-      nt.run.run { strategy = 'dap' }
+      require('neotest').run.run { strategy = 'dap' }
     end,
     desc = 'Test Debug',
   },
   {
     '<leader>to',
     function()
-      nt.output.open()
+      require('neotest').output.open()
     end,
     desc = 'Test Output',
   },
@@ -116,8 +116,8 @@ wk.add {
     function()
       local exrc = vim.g.exrc
       local env = (exrc and exrc.neotest and exrc.neotest.env) or {}
-      nt.run.run { env = env }
-      nt.summary.open()
+      require('neotest').run.run { env = env }
+      require('neotest').summary.open()
     end,
     desc = 'Test Single',
   },

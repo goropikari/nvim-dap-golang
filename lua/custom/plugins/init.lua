@@ -21,9 +21,6 @@ return {
   -- [[ Configure LSP ]]
   require 'custom.plugins.lsp',
 
-  -- [[ Configure Test ]]
-  require 'custom.plugins.test',
-
   -- [[ Configure autocmds ]]
   require 'custom.plugins.autocmds',
 }
