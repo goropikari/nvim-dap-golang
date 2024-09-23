@@ -146,6 +146,16 @@ wk.add {
     require('dapui').close,
     desc = 'Close DAP UI',
   },
+  {
+    '<F5>',
+    dap.continue,
+    desc = 'Debug: Continue',
+  },
+  {
+    '<F10>',
+    dap.step_over,
+    desc = 'Debug: Step over',
+  },
 }
 
 -- [[ osc52 ]]

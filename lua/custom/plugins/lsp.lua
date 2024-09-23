@@ -65,6 +65,8 @@ local on_attach = function(client, bufnr)
   local lsp_format = function()
     if vim.bo.filetype == 'go' then
       gopls_format()
+    elseif vim.bo.filetype == 'lua' then
+      require('stylua-nvim').format_file()
     else
       vim.lsp.buf.format { async = false }
     end
