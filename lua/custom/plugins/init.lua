@@ -13,11 +13,6 @@ return {
   -- [[ Configure Telescope ]]
   require 'custom.plugins.telescope',
 
-  -- [[ Configure Treesitter ]]
-  -- See `:help nvim-treesitter`
-  -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
-  require 'custom.plugins.treesitter',
-
   -- [[ Configure LSP ]]
   require 'custom.plugins.lsp',
 
