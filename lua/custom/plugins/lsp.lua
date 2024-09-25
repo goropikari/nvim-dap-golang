@@ -246,7 +246,13 @@ local lsp_langs = {
     ruby_lsp = {},
   },
   clangd = {
-    clangd = {},
+    clangd = {
+      -- https://www.reddit.com/r/neovim/comments/16qwp3d/comment/k261adn/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+      cmd = {
+        'clangd',
+        '--fallback-style=webkit',
+      },
+    },
   },
 }
 
