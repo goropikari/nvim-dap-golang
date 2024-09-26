@@ -4,11 +4,13 @@ setup:
 install:
 	rm -rf ~/.local/neovim
 	mkdir -p ~/.local/neovim
-	cd ~/.local/neovim
-	wget https://github.com/neovim/neovim/releases/download/v0.9.5/nvim.appimage
-	chmod u+x nvim.appimage
-	./nvim.appimage --appimage-extract
-	ln -sf ${HOME}/.local/neovim/squashfs-root/usr/bin/nvim ${HOME}/.local/bin/nvim
+	mkdir -p ~/.local/bin
+	cd ~/.local/neovim && \
+	wget https://github.com/neovim/neovim/releases/download/v0.10.1/nvim.appimage && \
+	chmod u+x nvim.appimage && \
+	./nvim.appimage --appimage-extract && \
+	ln -sf ${HOME}/.local/neovim/squashfs-root/usr/bin/nvim ${HOME}/.local/bin/nvim && \
+	rm -f nvim.appimage
 
 clean:
 	rm -rf ~/.local/share/nvim
