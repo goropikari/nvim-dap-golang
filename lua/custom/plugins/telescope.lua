@@ -90,4 +90,11 @@ wk.add({
   { '<leader>sg', require('telescope.builtin').live_grep, desc = 'Search by Grep' },
   { '<leader>sG', ':LiveGrepGitRoot<cr>', desc = 'Search by Grep on Git Root' },
   { '<leader>sd', require('telescope.builtin').diagnostics, desc = 'Search Diagnostics' },
+  {
+    '<leader>st',
+    function()
+      vim.cmd([[Telescope termfinder find]])
+    end,
+    desc = 'Search ToggleTerm',
+  },
 })
