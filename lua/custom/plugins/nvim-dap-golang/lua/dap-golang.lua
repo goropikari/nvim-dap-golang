@@ -28,11 +28,11 @@ vim.list_extend(dap.configurations.go, {
     request = 'attach',
     mode = 'local',
     args = {},
-    processId = '${command:pickProcess}',
+    -- processId = '${command:pickProcess}',
     -- pick_process を使う方法だと adapter で tonumber を使わなくても良い
-    -- processId = function()
-    --   return require('dap.utils').pick_process()
-    -- end,
+    processId = function()
+      return require('dap.utils').pick_process()
+    end,
   },
   {
     type = 'golang',
@@ -51,24 +51,36 @@ vim.list_extend(dap.configurations.go, {
   },
 })
 
-dap.adapters.golang = function(callback, config, parent)
+-- dap.adapters.golang = function(callback, config, parent)
+--   local uds = os.tmpname() .. '.sock'
+--   local args = { 'dap', '-l', 'unix:' .. uds }
+--   vim.list_extend(args, config.args or {})
+--   callback({
+--     type = 'pipe',
+--     pipe = uds,
+--     executable = {
+--       command = 'dlv',
+--       args = args,
+--     },
+--     enrich_config = function(cfg, on_config)
+--       local final_config = vim.deepcopy(cfg)
+--       if cfg.processId then
+--         final_config.processId = tonumber(cfg.processId)
+--       end
+--       on_config(final_config)
+--     end,
+--   })
+-- end
+
+dap.adapters.golang = function(cb, cfg, parent)
   local uds = os.tmpname() .. '.sock'
-  local args = { 'dap', '-l', 'unix:' .. uds }
-  vim.list_extend(args, config.args or {})
-  callback({
+  cb({
     type = 'pipe',
     pipe = uds,
     executable = {
       command = 'dlv',
-      args = args,
+      args = { 'dap', '-l', 'unix:' .. uds },
     },
-    enrich_config = function(cfg, on_config)
-      local final_config = vim.deepcopy(cfg)
-      if cfg.processId then
-        final_config.processId = tonumber(cfg.processId)
-      end
-      on_config(final_config)
-    end,
   })
 end
 
