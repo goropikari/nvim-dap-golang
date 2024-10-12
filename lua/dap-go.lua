@@ -32,16 +32,16 @@ local tmp_history = {
 ---@field configurations table<DapConfiguration>
 ---@filed delve_path string
 ---@filed delve_args table<string>
----@field host string
----@field port number
+---@field remote_host string
+---@field remote_port number
 
 ---@type PluginConfiguration
 local default_config = {
   configurations = {},
   delve_path = 'dlv',
   delve_args = {},
-  host = '127.0.0.1',
-  port = 2345,
+  remote_host = os.getenv('DAP_DELVE_HOST') or '127.0.0.1',
+  remote_port = os.getenv('DAP_DELVE_PORT') and tonumber(os.getenv('DAP_DELVE_PORT')) or 12345,
 }
 
 ---@type PluginConfiguration
@@ -145,7 +145,10 @@ vim.list_extend(dap.configurations.go, {
     type = 'go',
     name = 'Debug remote',
     request = 'attach',
+    mode = 'remote',
     host = '127.0.0.1',
+    port = 12345,
+    -- dlv debug -l 127.0.0.1:12345 --headless ./main.go
   },
   {
     type = 'go',
@@ -177,8 +180,8 @@ dap.adapters.go = function(cb, cfg, parent)
   if cfg.mode == 'remote' then
     cb({
       type = 'server',
-      host = internal_global_config.host,
-      port = internal_global_config.port,
+      host = cfg.host or internal_global_config.remote_host,
+      port = cfg.port or internal_global_config.remote_port,
     })
   else
     cb({
