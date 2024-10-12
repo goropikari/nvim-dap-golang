@@ -103,14 +103,14 @@ end
 
 vim.list_extend(dap.configurations.go, {
   {
-    type = 'golang',
+    type = 'go',
     name = 'Debug',
     request = 'launch',
     mode = 'debug',
     program = '${file}',
   },
   {
-    type = 'golang',
+    type = 'go',
     name = 'Debug with arguments',
     request = 'launch',
     mode = 'debug',
@@ -118,14 +118,14 @@ vim.list_extend(dap.configurations.go, {
     args = input_args,
   },
   {
-    type = 'golang',
+    type = 'go',
     name = 'Debug executable',
     request = 'launch',
     mode = 'exec',
     program = '${fileBasenameNoExtension}',
   },
   {
-    type = 'golang',
+    type = 'go',
     name = 'Debug executable with arguments',
     request = 'launch',
     mode = 'exec',
@@ -133,7 +133,7 @@ vim.list_extend(dap.configurations.go, {
     args = input_args,
   },
   {
-    type = 'golang',
+    type = 'go',
     name = 'Debug attach process',
     request = 'attach',
     mode = 'local',
@@ -142,13 +142,13 @@ vim.list_extend(dap.configurations.go, {
     end,
   },
   {
-    type = 'golang',
+    type = 'go',
     name = 'Debug remote',
     request = 'attach',
     host = '127.0.0.1',
   },
   {
-    type = 'golang',
+    type = 'go',
     name = 'Replay',
     request = 'launch',
     mode = 'replay',
@@ -159,7 +159,7 @@ vim.list_extend(dap.configurations.go, {
     traceDirPath = input_trace_dir_path,
   },
   {
-    type = 'golang',
+    type = 'go',
     name = 'Core',
     request = 'launch',
     mode = 'core',
